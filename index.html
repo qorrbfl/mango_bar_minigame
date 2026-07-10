@@ -3,7 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<title>🥭 망고 쫀득바 만들기</title>
+<title>망고 쫀득바 만들기</title>
+
+<!-- 브라우저 탭 아이콘 (망고 이모지) -->
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥭</text></svg>">
+
+<!-- 공유 썸네일 (Open Graph / Twitter Card) -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="🥭 망고 쫀득바 만들기">
+<meta property="og:description" content="망고 쫀득바를 만들어 보는 미니게임!">
+<meta property="og:image" content="https://mango-bar-minigame.pages.dev/assets/title_typo.png">
+<meta property="og:url" content="https://mango-bar-minigame.pages.dev/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="🥭 망고 쫀득바 만들기">
+<meta name="twitter:description" content="망고 쫀득바를 만들어 보는 미니게임!">
+<meta name="twitter:image" content="https://mango-bar-minigame.pages.dev/assets/title_typo.png">
+
 <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <style>
   @font-face {
@@ -69,7 +84,7 @@
   #bgArt{ display:none; }
 
   .bubble{
-    position:absolute; left:21px; right:21px; top:128px; transform:scale(.9); transform-origin:top center;
+    position:absolute; left:21px; right:21px; top:90px; transform:scale(.9); transform-origin:top center;
     background:#fff; border:3px solid #ffd6a0; color:#000;
     padding:7px 14px; border-radius:16px; font-size:17px; white-space:pre-line;
     text-align:center; line-height:1.4;
@@ -77,7 +92,7 @@
   }
   .bubble .hl{ background:#ffe066; border-radius:4px; padding:0 3px; }
   .bubbleShadow{
-    position:absolute; left:17px; right:17px; top:124px; transform:scale(.9); transform-origin:top center;
+    position:absolute; left:17px; right:17px; top:86px; transform:scale(.9); transform-origin:top center;
     border-radius:20px; background:#FED33C; opacity:0; transition:opacity .25s ease;
     pointer-events:none; z-index:4;
   }
@@ -95,7 +110,7 @@
   .shelf{
     display:flex; justify-content:center; gap:2px;
     background:transparent; border-radius:0; padding:10px 7px 8px;
-    box-shadow:none; position:absolute; bottom:40px; left:0; right:0;
+    box-shadow:none; position:absolute; bottom:0px; left:0; right:0;
     z-index:100;
   }
   .item{
@@ -116,6 +131,12 @@
   }
   .item.done::after{content:"✔"; position:absolute; top:-6px; right:-4px; background:var(--mint);
     color:#3f8f68; width:19px; height:19px; border-radius:50%; font-size:12px; line-height:19px; box-shadow:0 2px 4px rgba(0,0,0,.15);}
+  /* 좁은 화면(≤440px)에서 다섯 버튼이 한 줄에 들어오도록 뷰포트 기준으로 축소 */
+  @media (max-width:440px){
+    .shelf{ gap:0; padding:10px 4px 8px; }
+    .item{ padding:5px 3px 4px; font-size:clamp(11px,3.3vw,15px); -webkit-text-stroke-width:2px; }
+    .item svg,.item img{ width:17vw; height:17vw; max-width:78px; max-height:78px; }
+  }
   @keyframes wiggle{0%,100%{transform:rotate(0) translateY(0);}25%{transform:rotate(-4deg) translateY(-3px);}75%{transform:rotate(4deg) translateY(-3px);}}
   @keyframes arrowBounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
 
@@ -293,8 +314,8 @@
 
   <div class="intro" id="intro">
     <div class="introTitleWrap">
-      <img src="assets/title_typo_multiple.png" alt="" class="introTitle introTitleMultiply">
-      <img src="assets/title_typo.png" alt="망고 쫀득바 만들기" class="introTitle introTitleTop">
+      <img src="assets/title_typo_multiple.webp" alt="" class="introTitle introTitleMultiply">
+      <img src="assets/title_typo.webp" alt="망고 쫀득바 만들기" class="introTitle introTitleTop">
     </div>
     <div class="introBtns">
       <button class="ibtn" id="btnHow">게임 방법</button>
