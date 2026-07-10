@@ -1,0 +1,1618 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<title>🥭 망고 쫀득바 만들기</title>
+<link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+<style>
+  @font-face {
+    font-family: 'CookieRun';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/CookieRun-Regular.woff') format('woff');
+    font-weight: normal;
+    font-display: swap;
+  }
+  :root{
+    --bg1:#fff3d6; --bg2:#ffe0c2; --panel:#fffaf0;
+    --accent:#ff9e2c; --accent-dark:#e07f1a;
+    --mango:#ffb347; --mango-deep:#ff9e2c;
+    --mint:#bdebd6; --text:#7a5a3a; --water:#bfe4f7;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;height:100%;}
+  body{
+    font-family:'CookieRun','Jua',sans-serif; color:var(--text);
+    background:
+      radial-gradient(circle at 12% 18%, #fff8e6 0 60px, transparent 61px),
+      radial-gradient(circle at 88% 12%, #ffeccf 0 80px, transparent 81px),
+      radial-gradient(circle at 82% 88%, #fff1da 0 70px, transparent 71px),
+      linear-gradient(160deg,var(--bg1),var(--bg2));
+    min-height:100%;
+    user-select:none; -webkit-user-select:none; touch-action:none;
+  }
+  .stage{
+    width:100%; height:100dvh; background:transparent;
+    padding:0;
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+  }
+  @media (min-width:520px){
+    body{display:flex; align-items:center; justify-content:center; padding:24px 0;}
+    .stage{
+      width:480px; height:min(880px, 94vh); border-radius:36px;
+      box-shadow:0 24px 60px rgba(200,140,60,.4), 0 0 0 10px #fff, 0 0 0 13px #f0d4a8;
+    }
+  }
+  @media (max-height:640px){ header p{display:none;} header h1{font-size:24px;} }
+  header{ text-align:center; margin:0; padding:10px 12px 6px; position:relative; z-index:10; }
+  header h1{ margin:0; font-size:30px; letter-spacing:1px; color:var(--accent-dark);}
+  header p{margin:2px 0 0; font-size:16px; color:#c09a6a;}
+
+  .progress{ display:flex; align-items:stretch; gap:8px; margin:18px 24px 8px; position:relative; z-index:100; }
+  .step-label{font-size:17px; white-space:nowrap; color:var(--accent-dark); min-width:98px; text-align:center;
+    background:#ffedd2; border-radius:12px; padding:4px 8px; box-sizing:border-box;
+    display:flex; align-items:center; justify-content:center;
+    border:2px solid #B66B27; box-shadow:0 0 0 5px #fff;}
+  .bar{flex:1; background:#f5e6d0; border-radius:30px; overflow:hidden; box-sizing:border-box;
+    border:2px solid #B66B27; box-shadow:0 0 0 5px #fff, inset 0 2px 3px rgba(0,0,0,.08);}
+  .bar i{display:block; height:100%; width:0%; border-radius:30px; position:relative; overflow:hidden;
+    background:linear-gradient(90deg,#FFBB00,#FF9500); transition:width .18s ease;}
+  .bar i::before{content:""; position:absolute; inset:0; mix-blend-mode:multiply; pointer-events:none;
+    background:repeating-linear-gradient(70deg, #FFDFB3 0px, #FFDFB3 3px, transparent 3px, transparent 10px);}
+  .bar i::after{content:""; position:absolute; left:10px; right:10px; top:3px; height:25%;
+    background:#FFDB4D; border-radius:30px;}
+
+  .scene{ position:relative; border-radius:0; overflow:visible; flex:1; min-height:0;
+    background-size:cover; background-position:center; background-image:url('assets/bg.jpg');
+  }
+  .scene svg{display:block; width:100%; height:100%; background:transparent;}
+  #bgArt{ display:none; }
+
+  .bubble{
+    position:absolute; left:21px; right:21px; top:128px; transform:scale(.9); transform-origin:top center;
+    background:#fff; border:3px solid #ffd6a0; color:#000;
+    padding:7px 14px; border-radius:16px; font-size:17px; white-space:pre-line;
+    text-align:center; line-height:1.4;
+    box-shadow:none; opacity:0; transition:all .25s ease; pointer-events:none; z-index:5;
+  }
+  .bubble .hl{ background:#ffe066; border-radius:4px; padding:0 3px; }
+  .bubbleShadow{
+    position:absolute; left:17px; right:17px; top:124px; transform:scale(.9); transform-origin:top center;
+    border-radius:20px; background:#FED33C; opacity:0; transition:opacity .25s ease;
+    pointer-events:none; z-index:4;
+  }
+  .bubbleShadow.show{opacity:1; transform:scale(1);}
+  .bubble.show{opacity:1; transform:scale(1);}
+  .bubble::after{content:""; position:absolute; left:50%; bottom:-9px; transform:translateX(-50%);
+    border:8px solid transparent; border-top-color:#ffd6a0; border-bottom:0;}
+
+  .count{position:absolute; left:50%; top:44%; transform:translate(-50%,-50%);
+    font-size:74px; color:#fff; text-shadow:0 3px 0 var(--accent-dark), 0 6px 14px rgba(0,0,0,.2);
+    opacity:0; pointer-events:none; z-index:6;}
+  .count.pop{animation:cnt .95s ease forwards;}
+  @keyframes cnt{0%{opacity:0;transform:translate(-50%,-50%) scale(.4);}25%{opacity:1;transform:translate(-50%,-50%) scale(1.15);}70%{opacity:1;transform:translate(-50%,-50%) scale(1);}100%{opacity:0;transform:translate(-50%,-50%) scale(1);}}
+
+  .shelf{
+    display:flex; justify-content:center; gap:2px;
+    background:transparent; border-radius:0; padding:10px 7px 8px;
+    box-shadow:none; position:absolute; bottom:40px; left:0; right:0;
+    z-index:100;
+  }
+  .item{
+    flex:0 0 auto; border:0; background:transparent; border-radius:0; padding:6px 6px 5px;
+    display:flex; flex-direction:column; align-items:center; gap:2px;
+    font-family:inherit; font-size:15px; font-weight:700; color:var(--text); cursor:pointer;
+    box-shadow:none; transition:transform .12s, opacity .2s ease; position:relative;
+    appearance:none; -webkit-appearance:none; outline:none; text-decoration:none;
+    -webkit-text-stroke:3px #fff; paint-order:stroke fill; opacity:1;
+  }
+  .item svg,.item img{width:78px;height:78px;}
+  .item:disabled{cursor:default; opacity:.4;}
+  .item:not(:disabled):hover{transform:translateY(-3px);}
+  .item.next:not(:disabled)::before{
+    content:""; position:absolute; left:50%; top:-114px; transform:translateX(-50%);
+    width:78px; height:78px; background:url('assets/arrow.png') center/contain no-repeat;
+    animation:arrowBounce 1s ease-in-out infinite; pointer-events:none;
+  }
+  .item.done::after{content:"✔"; position:absolute; top:-6px; right:-4px; background:var(--mint);
+    color:#3f8f68; width:19px; height:19px; border-radius:50%; font-size:12px; line-height:19px; box-shadow:0 2px 4px rgba(0,0,0,.15);}
+  @keyframes wiggle{0%,100%{transform:rotate(0) translateY(0);}25%{transform:rotate(-4deg) translateY(-3px);}75%{transform:rotate(4deg) translateY(-3px);}}
+  @keyframes arrowBounce{0%,100%{transform:translateX(-50%) translateY(0);}50%{transform:translateX(-50%) translateY(8px);}}
+
+  .floaty{animation:bob 1.6s ease-in-out infinite;}
+  @keyframes bob{0%,100%{transform:translateY(0);}50%{transform:translateY(-7px);}}
+
+  @keyframes fallDrop{0%{transform:translateY(0); opacity:.95;}100%{transform:translateY(46px); opacity:0;}}
+  .fdrop{animation:fallDrop .7s ease-in forwards;}
+  @keyframes floatUp{0%{transform:translateY(0) scale(.5); opacity:.95;}100%{transform:translateY(-40px) scale(1.1); opacity:0;}}
+  .fbub{animation:floatUp 1.1s ease-out forwards;}
+  @keyframes steamRise{0%{transform:translateY(0) scale(.85); opacity:0;}15%{opacity:.85;}100%{transform:translateY(-120px) scale(1.15); opacity:0;}}
+  .steamRise{animation:steamRise 4s ease-out forwards;}
+  @keyframes snowFall{0%{transform:translateY(-10px); opacity:0;}15%{opacity:.9;}100%{transform:translateY(120px); opacity:0;}}
+  .snow{animation:snowFall 1.8s linear forwards;}
+  @keyframes twinkle{0%,100%{opacity:0; transform:scale(.4) rotate(0deg);}50%{opacity:1; transform:scale(1.1) rotate(25deg);}}
+  .spark{animation:twinkle 1.4s ease-in-out infinite; transform-origin:center; transform-box:fill-box;}
+  @keyframes popIn{0%{transform:scale(0);}70%{transform:scale(1.12);}100%{transform:scale(1);}}
+  .popin{animation:popIn .5s ease both; transform-origin:center; transform-box:fill-box;}
+  @keyframes fadeAndSink{0%{opacity:1;transform:translateY(0);}100%{opacity:.5;transform:translateY(25px);}}
+  .fade-opacity{animation:fadeAndSink 2s ease-in-out forwards;}
+
+  .finish{
+    position:absolute; inset:0; z-index:7; pointer-events:none; opacity:0; transition:opacity .5s;
+  }
+  .finish.show{opacity:1;}
+  .finish h2{
+    position:absolute; left:50%; top:230px; transform:translateX(-50%); white-space:nowrap;
+    margin:0; font-size:34px; color:var(--accent-dark);
+    -webkit-text-stroke:12px #fff; paint-order:stroke fill;
+  }
+  .finish button{
+    position:absolute; left:50%; bottom:164px; transform:translateX(-50%);
+    font-family:inherit; font-size:22px; font-weight:900; border:0; color:#fff;
+    background:transparent; padding:26px 34px; cursor:pointer; box-shadow:none; isolation:isolate;
+    pointer-events:none;
+    text-shadow:
+      -2px -2px 0 #50280E, 2px -2px 0 #50280E, -2px 2px 0 #50280E, 2px 2px 0 #50280E,
+      -2px 0 0 #50280E, 2px 0 0 #50280E, 0 -2px 0 #50280E, 0 2px 0 #50280E;
+  }
+  .finish button::before{
+    content:''; position:absolute; inset:0; z-index:-1;
+    background:url('assets/mango-cube.png') center/contain no-repeat;
+    transition:transform .2s;
+  }
+  .finish.show button{pointer-events:auto;}
+  .finish button:hover::before{transform:rotate(30deg);}
+  .finish button:active::before{transform:rotate(30deg) scale(.95);}
+
+  .intro{
+    position:absolute; inset:0; z-index:300;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px;
+    background:url('assets/bg.jpg') center/cover, linear-gradient(160deg,#fff3d6,#ffe0c2);
+  }
+  .introTitleWrap{
+    position:relative; max-width:80%; margin:0 0 14px; top:-50px;
+  }
+  .introTitle{ display:block; width:100%; height:auto; }
+  .introTitleMultiply{ mix-blend-mode:multiply; }
+  .introTitleTop{
+    position:absolute; inset:0; width:100%; height:100%;
+    filter:drop-shadow(0 4px 8px rgba(210,140,60,.35));
+  }
+  .introBtns{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .ibtn{
+    position:relative; font-family:inherit; font-size:22px; font-weight:900; border:0; color:#fff;
+    background:transparent; padding:26px 34px; cursor:pointer; box-shadow:none; isolation:isolate;
+    text-shadow:
+      -2px -2px 0 #50280E, 2px -2px 0 #50280E, -2px 2px 0 #50280E, 2px 2px 0 #50280E,
+      -2px 0 0 #50280E, 2px 0 0 #50280E, 0 -2px 0 #50280E, 0 2px 0 #50280E;
+  }
+  .ibtn::before{
+    content:''; position:absolute; inset:0; z-index:-1;
+    background:url('assets/mango-cube.png') center/contain no-repeat;
+    transition:transform .2s;
+  }
+  .ibtn:hover::before{ transform:rotate(30deg); }
+  .ibtn:active::before{ transform:rotate(30deg) scale(.95); }
+  .howto{
+    position:absolute; inset:0; background:rgba(0,0,0,.4); z-index:2;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;
+  }
+  .howto[hidden]{display:none;}
+  .howtoCard{
+    background:#fffaf0; border-radius:24px; padding:24px 26px; max-width:88%;
+    border:2px solid #50280E; box-shadow:none;
+    display:flex; flex-direction:column; align-items:center;
+  }
+  .howto h2{margin:0 0 6px; color:var(--accent-dark); font-size:28px;}
+  .howto ol{list-style:none; text-align:left; font-size:18px; line-height:2; color:var(--text); margin:8px 0 18px; padding:0;}
+  .readygo{
+    position:absolute; left:50%; top:44%; transform:translate(-50%,-50%);
+    width:360px; max-width:70%; pointer-events:none; z-index:250;
+    opacity:0;
+  }
+  .readygo img{display:block; width:100%; height:auto;}
+  .readygo.pop{animation:cnt .95s ease forwards;}
+  @media (prefers-reduced-motion:reduce){ *{animation-duration:.01s !important;} }
+</style>
+</head>
+<body>
+<div class="stage">
+
+
+  <div class="scene" id="scene">
+    <div class="progress">
+      <span class="step-label" id="stepLabel">① 젤라틴 불리기</span>
+      <span class="bar"><i id="barFill"></i></span>
+    </div>
+
+    <div class="bubbleShadow" id="msgShadow"></div>
+    <div class="bubble" id="msg"></div>
+    <div class="count" id="count"></div>
+
+    <svg id="gameSvg" viewBox="0 0 400 460" xmlns="http://www.w3.org/2000/svg">
+      <defs id="defs">
+        <linearGradient id="pureeG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#FED33C"/><stop offset="50%" stop-color="#FFC503"/><stop offset="100%" stop-color="#FEAA02"/>
+        </linearGradient>
+        <linearGradient id="barG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#ffc060"/><stop offset="100%" stop-color="#ff9226"/>
+        </linearGradient>
+        <filter id="maskBoost" x="-20%" y="-20%" width="140%" height="140%">
+          <feComponentTransfer><feFuncR type="linear" slope="3" intercept="0"/><feFuncG type="linear" slope="3" intercept="0"/><feFuncB type="linear" slope="3" intercept="0"/></feComponentTransfer>
+        </filter>
+      </defs>
+
+      <g id="bgArt">
+      <!-- kitchen background (뷰박스 밖까지 확장: 어떤 화면비에서도 안 잘림) -->
+      <rect x="-400" y="-500" width="1200" height="840" fill="#fff6e3"/>
+      <g opacity=".5" stroke="#ffe4bd" stroke-width="3">
+        <path d="M-400 -270 H800 M-400 -180 H800 M-400 -90 H800 M-400 0 H800 M-400 90 H800 M-400 180 H800 M-400 270 H800"/>
+        <path d="M-300 -500 V340 M-200 -500 V340 M-100 -500 V340 M0 -500 V340 M100 -500 V340 M200 -500 V340 M300 -500 V340 M400 -500 V340 M500 -500 V340"/>
+      </g>
+      <rect x="-400" y="340" width="1200" height="600" fill="#bdebd6"/>
+      <rect x="-400" y="340" width="1200" height="12" fill="#a5dcc3"/>
+      <ellipse cx="60" cy="60" rx="26" ry="26" fill="#ffe9c4"/>
+      <path d="M60 44 a16 16 0 0 1 0 32 a16 16 0 0 1 0 -32" fill="#ffd88f"/>
+      <circle cx="60" cy="60" r="7" fill="#ffb347"/>
+      </g><!-- /bgArt -->
+
+      <!-- dynamic stage -->
+      <g id="stage" transform="translate(0,-30)"></g>
+      <g id="fxLayer" transform="translate(0,-30)"></g>
+      <g id="sparkLayer" transform="translate(0,-30)"></g>
+    </svg>
+
+    <div class="finish" id="finish">
+      <h2>🥭 완성~!🥭</h2>
+      <button id="restart">다시 만들기</button>
+    </div>
+  </div>
+
+  <div class="shelf" id="shelf">
+    <button class="item" id="btnGel">
+      <img src="assets/gelatin_button.png" alt="젤라틴">
+      젤라틴
+    </button>
+    <button class="item" id="btnBlend">
+      <img src="assets/mixer_button.png" alt="망고 갈기">
+      망고 갈기
+    </button>
+    <button class="item" id="btnHeat">
+      <img src="assets/fire_button.png" alt="끓이기">
+      끓이기
+    </button>
+    <button class="item" id="btnPour">
+      <img src="assets/mold_button.png" alt="틀에 붓기">
+      틀에 붓기
+    </button>
+    <button class="item" id="btnFreeze">
+      <img src="assets/freeze_button.png" alt="얼리기">
+      얼리기
+    </button>
+  </div>
+
+  <div class="intro" id="intro">
+    <div class="introTitleWrap">
+      <img src="assets/title_typo_multiple.png" alt="" class="introTitle introTitleMultiply">
+      <img src="assets/title_typo.png" alt="망고 쫀득바 만들기" class="introTitle introTitleTop">
+    </div>
+    <div class="introBtns">
+      <button class="ibtn" id="btnHow">게임 방법</button>
+      <button class="ibtn" id="btnPlay">게임 하기</button>
+    </div>
+    <div class="howto" id="howto" hidden>
+      <div class="howtoCard">
+        <h2>🍳 게임 방법</h2>
+        <ol>
+          <li>① 쫀득함의 비밀, 판 젤라틴을 찬물에 퐁당 불려요</li>
+          <li>② 생망고·저당 알룰로스·레몬을 믹서기에 넣고 갈아요</li>
+          <li>③ 망고 퓨레를 냄비에 붓고 끓인 뒤, 불린 젤라틴을 넣어 저어 쫀득하게 만들어요</li>
+          <li>④ 퓨레를 몰드에 붓고 막대를 꽂아요</li>
+          <li>⑤ 냉동실에서 얼리면 생망고 20% 쫀득바 완성! 🍡</li>
+        </ol>
+        <button class="ibtn" id="btnBack">닫기</button>
+      </div>
+    </div>
+  </div>
+  <div class="readygo" id="readygo"></div>
+</div>
+
+<script>
+/* ============================================================
+   🎨 PNG 에셋 교체 설정 (ASSET-GUIDE.md 참고)
+   null 자리에 이미지 경로를 넣으면 해당 부위가 PNG로 교체됩니다.
+   예) mango_cube:'assets/mango.png'
+============================================================ */
+window.GAME_ASSETS = {
+  bg: 'assets/bg.jpg',
+  bowl_cold: 'assets/bowl.png',
+  gelatin_sheet: 'assets/gelatin-sheet.png',
+  gelatin_soaked: 'assets/gelatin-soaked.png',
+  gelatin_blob: 'assets/gelatin-blob.png',
+  blender: null,
+  mixer: 'assets/mixer.png',
+  mixer_lid: 'assets/mixer_lid.png',
+  mixer_glass_01basic: 'assets/mixer_glass_01basic.png',
+  mixer_glass_02overlay: 'assets/mixer_glass_02overlay.png',
+  mixer_glass_03colorburn: 'assets/mixer_glass_03colorburn.png',
+  mixer_inner_clippingmask: 'assets/mixer_inner_clippingmask.png',
+  jar_puree: null,
+  mango_cube: 'assets/mango-cube.png',
+  allulose: 'assets/allulose.png',
+  allulose_pour: 'assets/allulose_pour.png',
+  lemon: 'assets/lemon.png',
+  stove: 'assets/stove.png',
+  pot: 'assets/pot.png',
+  flame: null,
+  fire_center: 'assets/fire_center.png',
+  fire_left: 'assets/fire_left.png',
+  fire_right: 'assets/fire_right.png',
+  knob: 'assets/knob.png',
+  wood_spoon: 'assets/spoon.png',
+  mold: 'assets/mold.png',
+  mold_clippingmask: 'assets/mold_clippingmask.png',
+  pour_pot: null,
+  stick: 'assets/stick.png',
+  mold_filled: null,
+  freezer: null,
+  freezer_door: null,
+  freezer_glass_01basic: 'assets/freezer_glass_01basic.png',
+  freezer_glass_02overlay: 'assets/freezer_glass_02overlay.png',
+  freezer_glass_03colorburn: 'assets/freezer_glass_03colorburn.png',
+  bar_done: null,
+  final_mango_bar: 'assets/final_mango_bar.png',
+  final_mango_bar_stick: 'assets/final_mango_bar_stick.png',
+  fx_drop_water: null,
+  fx_drop_lemon: null,
+  fx_bubble: null,
+  fx_steam: 'assets/steam.png',
+  fx_snow: null,
+  sparkle: null,
+  icon_gel: null,
+  icon_blend: null,
+  icon_heat: null,
+  icon_mix: null,
+  icon_pour: null,
+  icon_freeze: null
+};
+</script>
+<script>
+(() => {
+  const $ = s => document.querySelector(s);
+  const svg = $('#gameSvg');
+  const NS = 'http://www.w3.org/2000/svg';
+  const stage = $('#stage'), fx = $('#fxLayer'), defs = $('#defs');
+  const msgEl = $('#msg'), msgShadowEl = $('#msgShadow'), barFill = $('#barFill'), stepLabel = $('#stepLabel');
+  const buttons = { gel:$('#btnGel'), blend:$('#btnBlend'), heat:$('#btnHeat'), pour:$('#btnPour'), freeze:$('#btnFreeze') };
+
+  // ---------- sounds ----------
+  let AC = null;
+  function blip(f=600, d=.08, type='sine', vol=.08){
+    try{
+      AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+      const o = AC.createOscillator(), g = AC.createGain();
+      o.type = type; o.frequency.value = f;
+      g.gain.setValueAtTime(vol, AC.currentTime);
+      g.gain.exponentialRampToValueAtTime(.0001, AC.currentTime + d);
+      o.connect(g).connect(AC.destination); o.start(); o.stop(AC.currentTime + d);
+    }catch(e){}
+  }
+  // 매 클릭마다 new Audio()를 새로 만들면 브라우저(특히 모바일)의 동시 재생 오디오 개수 제한에 걸려
+  // 게임 후반부에서 소리가 조용히 재생 실패할 수 있어, 작은 재생 풀을 돌려쓴다.
+  function pooledPlayer(src, vol, size=3){
+    const pool = Array.from({length:size}, ()=>{ const a = new Audio(src); a.volume = vol; return a; });
+    let i = 0;
+    return ()=>{ const a = pool[i]; i = (i+1) % pool.length; a.currentTime = 0; a.play().catch(()=>{}); };
+  }
+  const playClick = pooledPlayer('assets/sound/button-click.mp3', 0.6);
+  const playMsgPop = pooledPlayer('assets/sound/bubble-pop-04.mp3', 0.6);
+
+  // ---------- helpers ----------
+  const el = (tag, attrs={}) => { const n = document.createElementNS(NS, tag); for(const k in attrs) n.setAttribute(k, attrs[k]); return n; };
+  function svgPoint(cx, cy){
+    const pt = svg.createSVGPoint(); pt.x = cx; pt.y = cy;
+    return pt.matrixTransform(svg.getScreenCTM().inverse());
+  }
+  let msgTimer;
+  function say(text, hold=3000){
+    clearTimeout(msgTimer);
+    playMsgPop();
+    msgEl.innerHTML = text.replace(/\*(.+?)\*/g, (m, inner) => `<span class="hl">${inner}</span>`);
+    msgEl.classList.add('show');
+    msgShadowEl.style.height = (msgEl.offsetHeight + 8) + 'px';
+    msgShadowEl.classList.add('show');
+    if(hold) msgTimer = setTimeout(()=>{ msgEl.classList.remove('show'); msgShadowEl.classList.remove('show'); }, hold);
+  }
+  function setBar(p){ barFill.style.width = Math.min(100, Math.round(p*100)) + '%'; }
+  function setLabel(t){ stepLabel.textContent = t; }
+  function setPos(g,x,y){ g.setAttribute('transform',`translate(${x},${y})`); g._x=x; g._y=y; }
+
+  // ============ 🎨 PNG 에셋 엔진 ============
+  const ASSETS = window.GAME_ASSETS || {};
+  function imgTag(key,w,h,ax=.5,ay=.5){
+    const src=ASSETS[key];
+    return src? `<image href="${src}" x="${-w*ax}" y="${-h*ay}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>` : null;
+  }
+  function artHTML(key,w,h,ax,ay,fallback){ return imgTag(key,w,h,ax,ay) || fallback; }
+  function imgNode(key,cx,cy,w,h){
+    return el('image',{href:ASSETS[key], x:cx-w/2, y:cy-h/2, width:w, height:h, preserveAspectRatio:'xMidYMid meet'});
+  }
+  function swapStatic(id,key,x,y,w,h){
+    const src=ASSETS[key]; if(!src) return;
+    const n=document.getElementById(id); if(!n) return;
+    n.innerHTML = `<image href="${src}" x="${x}" y="${y}" width="${w}" height="${h}" preserveAspectRatio="xMidYMid meet"/>`;
+  }
+  function applyAssets(){
+    swapStatic('bgArt','bg',-400,-500,1200,1340);
+  }
+  const dist = (x1,y1,x2,y2)=>Math.hypot(x1-x2,y1-y2);
+
+  function draggable(g, opts={}){
+    let dragging = false, lastP = null;
+    g.style.cursor = 'grab';
+    g.addEventListener('pointerdown', e=>{
+      if(opts.canDrag && !opts.canDrag()) return;
+      dragging = true; g.setPointerCapture(e.pointerId); g.style.cursor='grabbing';
+      const f = g.querySelector('.floaty'); f && f.classList.remove('floaty');
+      if(!opts.noBlip) blip(520,.05,'sine',.05);
+      const p = svgPoint(e.clientX, e.clientY); lastP = p;
+      if(!opts.noFollow) setPos(g, p.x, p.y);
+      opts.onGrab && opts.onGrab(p);
+      e.stopPropagation();
+    });
+    g.addEventListener('pointermove', e=>{
+      if(!dragging) return;
+      const p = svgPoint(e.clientX, e.clientY); lastP = p;
+      if(!opts.noFollow) setPos(g, p.x, p.y);
+      opts.onMove && opts.onMove(p);
+    });
+    const up = e=>{
+      if(!dragging) return; dragging = false; g.style.cursor='grab';
+      // pointercancel 등에서 좌표가 깨질 수 있어 마지막 드래그 지점을 사용
+      let p = lastP;
+      if(e.type === 'pointerup' && Number.isFinite(e.clientX)){
+        const q = svgPoint(e.clientX, e.clientY);
+        if(Number.isFinite(q.x) && Number.isFinite(q.y)) p = q;
+      }
+      if(p) opts.onDrop && opts.onDrop(p);
+    };
+    g.addEventListener('pointerup', up);
+    g.addEventListener('pointercancel', up);
+    g._isDragging = ()=>dragging;
+  }
+
+  // ---------- steps framework ----------
+  const S = { step:'idle', mode:null };
+  const LABELS = { gel:'① 젤라틴 불리기', blend:'② 망고 갈기', heat:'③ 퓨레 끓이기', pour:'④ 틀에 붓기', freeze:'⑤ 얼리기', done:'✨ 완성' };
+  function activate(step){
+    S.step = step; setBar(0); setLabel(LABELS[step] || '준비');
+    Object.entries(buttons).forEach(([k,b])=>{ b.classList.remove('next'); if(k===step){ b.disabled=false; b.classList.add('next'); } });
+  }
+  function markDone(key){ buttons[key].disabled = true; buttons[key].classList.remove('next'); buttons[key].classList.add('done'); }
+  function clearStage(){ stage.innerHTML=''; fx.innerHTML=''; }
+  function countdown(n, onEnd){
+    // 숫자 대신 바늘이 빙글빙글 도는 시계 연출
+    const dur = n * 900;
+    const clockAudio = new Audio('assets/sound/clock-ticking.mp3');
+    clockAudio.loop = true; clockAudio.volume = 0.5;
+    clockAudio.play().catch(()=>{});
+    const clock = el('g',{transform:'translate(200,185)'});
+    let ticks = '';
+    for(let i=0;i<12;i++){
+      const a = i*30*Math.PI/180;
+      const r1 = i%3===0 ? 30 : 34, r2 = 38;
+      ticks += `<line x1="${Math.sin(a)*r1}" y1="${-Math.cos(a)*r1}" x2="${Math.sin(a)*r2}" y2="${-Math.cos(a)*r2}" stroke="#c09a6a" stroke-width="${i%3===0?4:2.5}" stroke-linecap="round"/>`;
+    }
+    clock.innerHTML = `<g class="popin">
+      <circle r="46" fill="#fffaf0" stroke="#B66B27" stroke-width="5"/>
+      <circle r="50" fill="none" stroke="#fff" stroke-width="4" opacity=".9"/>
+      ${ticks}
+      <line id="clockHour" x1="0" y1="4" x2="0" y2="-20" stroke="#7a5a3a" stroke-width="6" stroke-linecap="round"/>
+      <line id="clockMin" x1="0" y1="5" x2="0" y2="-32" stroke="#ff9e2c" stroke-width="4" stroke-linecap="round"/>
+      <circle r="5" fill="#B66B27"/>
+    </g>`;
+    fx.appendChild(clock);
+    const hourHand = clock.querySelector('#clockHour'), minHand = clock.querySelector('#clockMin');
+    const t0 = performance.now();
+    let raf;
+    const spin = (now)=>{
+      const p = Math.min(1, (now - t0) / dur);
+      hourHand.setAttribute('transform', `rotate(${720*p})`);
+      minHand.setAttribute('transform', `rotate(${2880*p})`);
+      if(p < 1) raf = requestAnimationFrame(spin);
+    };
+    raf = requestAnimationFrame(spin);
+    setTimeout(()=>{ cancelAnimationFrame(raf); clockAudio.pause(); clock.remove(); onEnd(); }, dur);
+  }
+
+  // ---------- fx ----------
+  function dropFx(x, y, color, stroke, key){
+    let c;
+    if(key && ASSETS[key]) c = imgNode(key, x, y, 13, 16);
+    else c = el('circle',{cx:x, cy:y, r:3+Math.random()*2.5, fill:color, stroke:stroke||'none','stroke-width':1.5, opacity:.95});
+    c.classList.add('fdrop'); fx.appendChild(c);
+    setTimeout(()=>c.remove(), 750);
+  }
+  function bubFx(x, y, color){
+    const r = 4 + Math.random()*5;
+    let c;
+    if(ASSETS.fx_bubble) c = imgNode('fx_bubble', x+(Math.random()*20-10), y, r*2.4, r*2.4);
+    else c = el('circle',{cx:x+(Math.random()*20-10), cy:y, r, fill:color||'#fff', opacity:.9});
+    c.classList.add('fbub'); fx.appendChild(c);
+    setTimeout(()=>c.remove(), 1150);
+  }
+  function steamFx(x,y){
+    let p;
+    if(ASSETS.fx_steam) p = imgNode('fx_steam', x, y, 160, 320);
+    else p = el('path',{d:`M${x} ${y} q 6 -10 0 -20 q -6 -10 0 -20`, stroke:'#fff','stroke-width':5, fill:'none','stroke-linecap':'round', opacity:.8});
+    p.classList.add('steamRise'); fx.appendChild(p);
+    setTimeout(()=>p.remove(), 4000);
+  }
+
+  // ============================================================
+  // STEP 1 : 젤라틴 불리기 — 판젤라틴 2장을 찬물에 퐁당
+  // ============================================================
+  function startGel(){
+    clearStage();
+    buttons.gel.classList.remove('next');
+    // 찬물 볼
+    const bowl = el('g',{transform:'translate(200,235)'});
+    bowl.innerHTML = artHTML('bowl_cold', 255, 165, .5, .32, `
+      <path d="M-70 -10 a70 70 0 0 0 140 0 Z" fill="#e8f4fb" stroke="#bcd9ea" stroke-width="4"/>
+      <ellipse cx="0" cy="-10" rx="70" ry="16" fill="#bfe4f7" stroke="#9fcbe6" stroke-width="3"/>
+      <ellipse cx="-20" cy="-12" rx="18" ry="5" fill="#dbf0fb"/>
+      <circle cx="26" cy="-10" r="8" fill="#eaf7ff" stroke="#cfe8f5" stroke-width="2"/>`);
+    stage.appendChild(bowl);
+
+    let placed = 0;
+    [{x:70,y:370, rot:-14},{x:330,y:370, rot:14}].forEach((p, idx)=>{
+      const g = el('g',{transform:`translate(${p.x},${p.y}) rotate(${p.rot})`});
+      const sheetArt = `<g class="floaty">${artHTML('gelatin_sheet', 96, 128, .5, .5, `
+        <rect x="-20" y="-28" width="40" height="56" rx="3" fill="#fdf6e8" stroke="#e8d9b8" stroke-width="2.5"/>
+        <path d="M-10 -22 v44 M0 -22 v44 M10 -22 v44 M-14 -12 h28 M-14 0 h28 M-14 12 h28" stroke="#efe3c6" stroke-width="2"/>`)}
+      </g>`;
+      g.innerHTML = sheetArt;
+      stage.appendChild(g);
+      draggable(g, {
+        noBlip: true,
+        onGrab:()=>{
+          const audio = new Audio('assets/sound/gelatin_PRESS1.mp3?t=' + Date.now());
+          audio.volume = 0.3;
+          audio.play().catch(e=>console.log('Play error:', e));
+        },
+        onDrop:(pt)=>{
+          const inBowl = dist(pt.x, pt.y, 200, 258) < 66;
+          const audio = new Audio((inBowl ? 'assets/sound/bubble-pop.mp3' : 'assets/sound/gelatin_PRESS2.mp3') + '?t=' + Date.now());
+          audio.volume = 0.3;
+          audio.play().catch(e=>console.log('Play error:', e));
+          if(inBowl){
+            placed++;
+            setPos(g, 200 + (placed===1?-22:22), 262 + placed*4);
+            g.innerHTML = `<g class="fade-opacity" style="animation-delay:1s">${artHTML('gelatin_soaked', 52, 40, .5, .5, `
+              <rect x="-20" y="-14" width="40" height="34" rx="8" fill="#fbf0d8" stroke="#e8d9b8" stroke-width="2"/>
+              <path d="M-12 -6 q6 4 12 0 q6 -4 12 0 M-12 4 q6 4 12 0 q6 -4 12 0" stroke="#efe3c6" stroke-width="2" fill="none"/>`)}
+            </g>`;
+            g.style.pointerEvents = 'none';
+            bubFx(pt.x, 250, '#dbf0fb');
+            setBar(placed/2);
+            if(placed===2){
+              say('5~10분 동안 말랑하게 불려요… ⏳', 2800);
+              setTimeout(()=>countdown(3, ()=>{
+                say(`말랑말랑~
+젤라틴이 준비되었어요!`);
+                markDone('gel');
+                setTimeout(()=>{ activate('blend'); say(`다음은 생망고 갈기!
+믹서기 버튼을 눌러요 🥭`); }, 1400);
+              }), 900);
+            }
+          }
+        }
+      });
+    });
+    say(`쫀득함의 비밀!
+*판 젤라틴 2장*을 찬물에 퐁당 담가요!`, 3600);
+  }
+
+  // ============================================================
+  // STEP 2 : 망고 갈기 — 재료 넣고 문질러서 갈기
+  // ============================================================
+  const blender = { fill:0 };
+  function mixerGeom(scale=1){
+    const mixerYOff = -20;
+    const mixerW = 256*.9, mixerH = 256*(164/156)*.9;
+    const maskW = 156*.65*1.1, maskH = 164*.65*1.1;
+    const maskX = -maskW/2 - 5 - 3 - 2 - .5, maskY = -maskH/2 - 20 + mixerYOff - 7 - 4 - 3;
+    const contentOffX = maskX + maskW/2, contentOffY = maskY + maskH/2 + 15 + 10;
+    return {
+      scale,
+      mixerYOff: mixerYOff*scale, mixerW: mixerW*scale, mixerH: mixerH*scale,
+      maskW: maskW*scale, maskH: maskH*scale, maskX: maskX*scale, maskY: maskY*scale,
+      contentOffX: contentOffX*scale, contentOffY: contentOffY*scale
+    };
+  }
+  function glassLayersHTML(maskX, maskY, maskW, maskH){
+    const glassImg = (key, blend, opacity=1)=> ASSETS[key]
+      ? `<image href="${ASSETS[key]}" x="${maskX}" y="${maskY}" width="${maskW}" height="${maskH}" preserveAspectRatio="xMidYMid meet" style="mix-blend-mode:${blend};opacity:${opacity}"/>`
+      : '';
+    return glassImg('mixer_glass_01basic','normal',.3) + glassImg('mixer_glass_02overlay','overlay') + glassImg('mixer_glass_03colorburn','color-burn');
+  }
+  function startBlend(){
+    clearStage();
+    buttons.blend.classList.remove('next');
+
+    // 믹서기 본체
+    const bl = el('g',{transform:'translate(215,240)', id:'blenderG'});
+    const useMixerImgs = !!ASSETS.mixer;
+    const {mixerYOff, mixerW, mixerH, maskW, maskH, maskX, maskY, contentOffX, contentOffY} = mixerGeom();
+    const jarClipMarkup = useMixerImgs
+      ? `<mask id="jarClip"><image href="${ASSETS.mixer_inner_clippingmask}" x="${maskX}" y="${maskY}" width="${maskW}" height="${maskH}" preserveAspectRatio="xMidYMid meet"/></mask>`
+      : `<clipPath id="jarClip"><path d="M-46 -80 h92 l-14 108 h-64 Z"/></clipPath>`;
+    const jarClipAttr = useMixerImgs ? 'mask="url(#jarClip)"' : 'clip-path="url(#jarClip)"';
+    const jarBackMarkup = useMixerImgs
+      ? `<image href="${ASSETS.mixer}" x="${-mixerW/2}" y="${-mixerH/2 + mixerYOff}" width="${mixerW}" height="${mixerH}" preserveAspectRatio="xMidYMid meet"/>`
+      : (ASSETS.blender
+          ? `<image href="${ASSETS.blender}" x="-78" y="-96" width="156" height="164" preserveAspectRatio="xMidYMid meet"/>`
+          : `<path d="M-46 -80 h92 l-14 108 h-64 Z" fill="#eaf5fb" stroke="#bcd9ea" stroke-width="4"/>`);
+    const jarFrontMarkup = useMixerImgs
+      ? glassLayersHTML(maskX, maskY, maskW, maskH)
+      : (ASSETS.blender ? '' : `<path d="M-46 -80 h92" stroke="#9fcbe6" stroke-width="5" stroke-linecap="round"/><path d="M46 -78 q26 4 22 34 q-3 20 -22 22" fill="none" stroke="#bcd9ea" stroke-width="7" stroke-linecap="round"/>`);
+    bl.innerHTML = `
+      <g id="blJar">
+        ${jarClipMarkup}
+        <g id="jarBack">${jarBackMarkup}</g>
+        <g ${jarClipAttr}>
+          <g transform="translate(${contentOffX},${contentOffY})">
+            <rect id="jarFill" x="-50" y="30" width="100" height="0" fill="url(#pureeG)"/>
+            <g id="jarChunks"></g>
+          </g>
+        </g>
+        <g id="jarFront">${jarFrontMarkup}</g>
+      </g>
+      <g id="blBase" style="${(useMixerImgs || ASSETS.blender) ? 'display:none' : ''}">
+        <rect x="-40" y="28" width="80" height="34" rx="8" fill="#8fb8d9"/>
+        <rect x="-40" y="28" width="80" height="10" rx="5" fill="#7ba6c9"/>
+        <circle cx="0" cy="46" r="8" fill="#fff" stroke="#7ba6c9" stroke-width="3"/>
+      </g>
+    `;
+    stage.appendChild(bl);
+    blender.fill = 0;
+    const jarChunks = bl.querySelector('#jarChunks');
+
+    // --- 재료들 ---
+    let mango = 0, sugar = false, lemonDrops = 0, blendReady = false;
+    let mangoInfoShown = false, alluloseInfoShown = false, lemonInfoShown = false;
+    const need = { mango:3 };
+    const totalAdd = need.mango + 1 + 1;
+    const addBar = ()=>setBar((mango + (sugar?1:0) + (lemonDrops>=3?1:0)) / totalAdd);
+    const mouth = {x:200 + contentOffX, y:168 + contentOffY};
+
+    // 망고 큐브 3개
+    [{x:56,y:396},{x:110,y:412},{x:70,y:352}].forEach((p,i)=>{
+      const g = el('g',{transform:`translate(${p.x},${p.y})`});
+      g.innerHTML = `<g class="floaty">${artHTML('mango_cube', 40, 40, .5, .5, `
+        <rect x="-16" y="-16" width="32" height="32" rx="7" fill="#ffb347" stroke="#f09a2e" stroke-width="3"/>
+        <rect x="-16" y="-16" width="32" height="14" rx="7" fill="#ffc879"/>
+        <circle cx="-6" cy="-8" r="2" fill="#fff" opacity=".8"/><circle cx="6" cy="-4" r="1.6" fill="#fff" opacity=".7"/>`)}
+      </g>`;
+      stage.appendChild(g);
+      draggable(g, {
+        noBlip:true,
+        onGrab:()=>{
+          playClick();
+          if(!mangoInfoShown){ mangoInfoShown = true; say(`이 망고는 쫀득바의
+*전체 함량의 20%*를 차지하는 진짜 *생망고*예요 🥭`, 3200); }
+        },
+        onDrop:(pt)=>{
+          if(dist(pt.x, pt.y, 200, 205) < 80){
+            playClick();
+            g.remove(); mango++;
+            const rowY = [-30, -46, -62];
+            const slotRot = [-22, 6, 20];
+            const row = (mango-1)%3;
+            const cx = -28 + Math.random()*56;
+            const rot = slotRot[row] + (Math.random()*8-4);
+            const chunk = el('image',{href:ASSETS.mango_cube, x:cx-8, y:rowY[row], width:40, height:40, preserveAspectRatio:'xMidYMid meet', transform:`rotate(${rot} ${cx+12} ${rowY[row]+20})`});
+            jarChunks.appendChild(chunk);
+            addBar();
+            checkAdds();
+          }
+        }
+      });
+    });
+
+    // 알룰로스 봉지
+    const sg = el('g',{transform:'translate(290,410)'});
+    sg.innerHTML = `<g class="floaty">${artHTML('allulose', 96, 120, .5, .5, `
+      <path d="M-16 -22 h32 l-4 44 h-24 Z" fill="#fff" stroke="#e0d5c2" stroke-width="2.5"/>
+      <path d="M-16 -22 h32" stroke="#ffb347" stroke-width="5" stroke-linecap="round"/>
+      <text x="0" y="8" text-anchor="middle" font-size="12" fill="#c09a6a" font-family="CookieRun">알룰로스</text>`)}
+    </g>`;
+    stage.appendChild(sg);
+    draggable(sg, {
+      noBlip:true,
+      onGrab:()=>{
+        playClick();
+        if(!alluloseInfoShown){ alluloseInfoShown = true; say(`알룰로스는 설탕 대신 쓰는 *저당 감미료*예요!
+칼로리 걱정 뚝 🍯`, 3200); }
+      },
+      onDrop:(pt)=>{
+        if(!sugar && dist(pt.x, pt.y, 200, 165) < 85){
+          sugar = true;
+          // 솔솔 뿌리기 연출
+          setPos(sg, mouth.x+30, mouth.y-60);
+          sg.innerHTML = `<g class="floaty">${artHTML('allulose_pour', 96, 120, .5, .5, '')}</g>`;
+          sg.style.pointerEvents='none';
+          let n = 0;
+          const iv = setInterval(()=>{
+            dropFx(mouth.x + Math.random()*30-15, mouth.y-10, '#fff', '#eee');
+            blip(900+Math.random()*200,.03,'sine',.4);
+            if(++n>=10){
+              clearInterval(iv); sg.remove();
+              for(let k=0;k<8;k++) jarChunks.appendChild(el('circle',{cx:-24+Math.random()*48, cy:-10+Math.random()*30, r:1.6, fill:'#fff'}));
+              addBar(); checkAdds();
+            }
+          }, 150);
+        }
+      }
+    });
+
+    // 레몬 반쪽 (믹서기 근처에 가져가거나 놓으면 자동으로 즙 짜기)
+    const lg = el('g',{transform:'translate(345,280)'});
+    lg.innerHTML = `<g class="floaty">${artHTML('lemon', 66, 66, .5, .5, `
+      <circle cx="0" cy="0" r="19" fill="#ffe873" stroke="#f0cf3e" stroke-width="3"/>
+      <circle cx="0" cy="0" r="13" fill="#fff6c9"/>
+      <path d="M0 -13 V13 M-13 0 H13 M-9 -9 L9 9 M-9 9 L9 -9" stroke="#ffe873" stroke-width="2.5"/>`)}
+    </g>`;
+    stage.appendChild(lg);
+    let lemonBusy = false;
+    draggable(lg, {
+      noBlip:true,
+      onGrab:()=>{
+        playClick();
+        if(!lemonInfoShown){ lemonInfoShown = true; say(`상큼한 레몬즙이
+망고의 단맛을 한층 살려줘요 🍋`, 3200); }
+      },
+      onDrop:(pt)=>{
+        if(!lemonBusy && lemonDrops < 3 && dist(pt.x, pt.y, 200, 165) < 85){
+          lemonBusy = true;
+          setPos(lg, mouth.x + 40, mouth.y - 70);
+          lg.innerHTML = `<g transform="rotate(-35)">${artHTML('lemon', 66, 66, .5, .5, `
+            <circle cx="0" cy="0" r="19" fill="#ffe873" stroke="#f0cf3e" stroke-width="3"/>
+            <circle cx="0" cy="0" r="13" fill="#fff6c9"/>
+            <path d="M0 -13 V13 M-13 0 H13 M-9 -9 L9 9 M-9 9 L9 -9" stroke="#ffe873" stroke-width="2.5"/>`)}
+          </g>`;
+          lg.style.pointerEvents = 'none';
+          let n = 0;
+          const maxJuice = .3;
+          const juice = el('rect',{x:-50, y:30, width:100, height:0, fill:'#fff3a8', opacity:.6, style:'transition:height .5s ease, y .5s ease'});
+          jarChunks.appendChild(juice);
+          const iv = setInterval(()=>{
+            lemonDrops++;
+            dropFx(mouth.x + Math.random()*18-9, mouth.y - 6, '#fff3a8', '#f0cf3e');
+            blip(760,.06,'sine',.5);
+            const frac = maxJuice * (lemonDrops/3);
+            juice.setAttribute('height', 88*frac);
+            juice.setAttribute('y', 30-88*frac);
+            if(lemonDrops >= 3){
+              clearInterval(iv);
+              setTimeout(()=>{ lg.remove(); addBar(); checkAdds(); }, 300);
+            }
+          }, 600);
+        }
+      }
+    });
+
+    function enableLid(){
+      const blX = 215, blY = 240;
+      const lidW = mixerW, lidH = mixerH;
+      const lid = el('g',{transform:'translate(330,452)'});
+      lid._x = 330; lid._y = 452;
+      lid.innerHTML = `<g class="floaty">
+        <image href="${ASSETS.mixer_lid}" x="${-lidW/2}" y="${-lidH/2}" width="${lidW}" height="${lidH}" preserveAspectRatio="xMidYMid meet" style="pointer-events:none"/>
+        <rect x="${-lidW/2}" y="${-lidH/2}" width="${lidW}" height="${lidH*.2}" fill="transparent" style="pointer-events:all"/>
+      </g>`;
+      stage.appendChild(lid);
+      let placed = false;
+      let grabOff = {x:0, y:0};
+      draggable(lid, {
+        noFollow: true,
+        noBlip: true,
+        onGrab:(p)=>{
+          playClick();
+          grabOff = {x: p.x - lid._x, y: p.y - lid._y};
+        },
+        onMove:(p)=>{
+          const f = lid.querySelector('.floaty'); f && f.classList.remove('floaty');
+          setPos(lid, p.x - grabOff.x, p.y - grabOff.y);
+        },
+        onDrop:(pt)=>{
+          if(placed) return;
+          if(dist(lid._x, lid._y, blX, blY) < 80){
+            playClick();
+            placed = true;
+            lid.remove();
+            const lidFinal = el('image',{href:ASSETS.mixer_lid, x:-mixerW/2, y:-mixerH/2+mixerYOff, width:mixerW, height:mixerH, preserveAspectRatio:'xMidYMid meet'});
+            bl.querySelector('#blJar').appendChild(lidFinal);
+            setTimeout(()=>{
+              say('이제 믹서기를 빠르게 문질러 갈아요! 위이잉~ 🌀', 3600);
+              setBar(0);
+              enableScrubBlend(bl, jarChunks);
+            }, 500);
+          }
+        }
+      });
+      say('믹서기 뚜껑을 덮어주세요! 🥭', 3200);
+    }
+    function checkAdds(){
+      if(mango>=3 && sugar && lemonDrops>=3 && !blendReady){
+        blendReady = true;
+        setTimeout(()=>{
+          setBar(0);
+          if(ASSETS.mixer_lid) enableLid();
+          else { say('이제 믹서기를 빠르게 문질러 갈아요! 위이잉~ 🌀', 3600); enableScrubBlend(bl, jarChunks); }
+        }, 500);
+      }
+    }
+    say('생망고 3개를 믹서기에 넣어요!', 4200);
+  }
+
+  function enableScrubBlend(bl, jarChunks){
+    S.mode = 'scrub';
+    let energy = 0, last = null;
+    const target = 1400;
+    const jar = bl.querySelector('#blJar');
+    const jarFill = bl.querySelector('#jarFill');
+    let shakeT = null;
+    const vibAudio = new Audio('assets/sound/vibration.mp3');
+    vibAudio.loop = true; vibAudio.volume = 0.5;
+    const stopVib = ()=> vibAudio.pause();
+    const onMove = e=>{
+      if(S.mode !== 'scrub') return;
+      if(!(e.buttons & 1) && e.pointerType === 'mouse') { last=null; return; }
+      const p = svgPoint(e.clientX, e.clientY);
+      if(dist(p.x, p.y, 200, 230) > 110){ last = null; return; }
+      if(last){
+        const d = dist(p.x, p.y, last.x, last.y);
+        energy += d;
+        const pr = Math.min(1, energy/target);
+        setBar(pr);
+        // 흔들림
+        jar.setAttribute('transform', `translate(${Math.random()*5-2.5},${Math.random()*4-2})`);
+        clearTimeout(shakeT); shakeT = setTimeout(()=>jar.setAttribute('transform',''), 90);
+        // 갈리는 정도
+        jarFill.setAttribute('y', 30 - 88*pr);
+        jarFill.setAttribute('height', 88*pr);
+        jarChunks.setAttribute('opacity', String(1-pr));
+        if(Math.random()<.3) blip(180+Math.random()*420,.03,'sawtooth',.02);
+        if(pr>=1){
+          S.mode = null;
+          svg.removeEventListener('pointermove', onMove);
+          jar.setAttribute('transform','');
+          jarChunks.innerHTML='';
+          stopVib();
+          say('곱게 갈렸어요! 생망고 20% 가득한 진짜 망고 퓨레 완성 🧡');
+          markDone('blend');
+          setTimeout(()=>{ activate('heat'); say('냄비에 부어서 데워볼까요? 끓이기 버튼!'); }, 1600);
+        }
+      }
+      last = p;
+    };
+    svg.addEventListener('pointermove', onMove);
+    svg.addEventListener('pointerdown', e=>{
+      last = svgPoint(e.clientX, e.clientY);
+      if(S.mode==='scrub') vibAudio.play().catch(()=>{});
+    });
+    svg.addEventListener('pointerup', stopVib);
+    svg.addEventListener('pointercancel', stopVib);
+  }
+
+  // ============================================================
+  // STEP 3 : 퓨레 끓이기(+젤라틴 섞기) — 붓고, 노브를 눌러 온도 조절 후 이어서 저어 마무리
+  // ============================================================
+  const pot = { fill:0, hasGel:false };
+  function drawStove(){
+    const g = el('g',{id:'stoveG', transform:'translate(200,420)'});
+    g.innerHTML = `
+      <g id="stoveBase">${ASSETS.stove ? `<image href="${ASSETS.stove}" x="-288" y="-126" width="576" height="126" preserveAspectRatio="xMidYMid meet"/>` : `<ellipse cx="0" cy="66" rx="86" ry="14" fill="#8a8f98"/><ellipse cx="0" cy="62" rx="86" ry="14" fill="#aab0ba"/><ellipse cx="0" cy="62" rx="56" ry="9" fill="#3c4048"/>`}</g>
+    `;
+    stage.appendChild(g);
+
+    const potGrp = el('g',{id:'potGroup', transform:'translate(200,290)'});
+    potGrp.innerHTML = `
+      <g id="potG" transform="translateY(-20)">
+        <defs><clipPath id="potClip"><ellipse cx="0" cy="-71.5" rx="94" ry="30"/></clipPath></defs>
+        <g id="potBack"><image href="${ASSETS.pot}" x="-192" y="-114" width="384" height="164" preserveAspectRatio="xMidYMid meet"/></g>
+        <g clip-path="url(#potClip)">
+          <rect id="potFill" x="-95" y="-41.5" width="190" height="0" fill="url(#pureeG)"/>
+          <g id="potBits"></g>
+        </g>
+      </g>
+    `;
+    stage.appendChild(potGrp);
+
+    // 불꽃 - 스토브·냄비보다 위에 보이도록 맨 나중에(최상단) 추가
+    const flameG = el('g',{id:'flameG', transform:'translate(200,420)'});
+    flameG.innerHTML = ASSETS.fire_center ? `
+        <image id="fireCenter" href="${ASSETS.fire_center}" x="-26" y="-128" width="52" height="60" preserveAspectRatio="xMidYMid meet" opacity="0"/>
+        <image id="fireLeft" href="${ASSETS.fire_left}" x="-62" y="-121" width="47" height="52" preserveAspectRatio="xMidYMid meet" opacity="0"/>
+        <image id="fireRight" href="${ASSETS.fire_right}" x="16" y="-121" width="47" height="52" preserveAspectRatio="xMidYMid meet" opacity="0"/>
+      ` : `<g opacity="0"><path d="M-26 62 q4 -14 8 0 M-8 64 q4 -18 8 0 M10 63 q4 -15 8 0" stroke="#ff9e2c" stroke-width="6" fill="none" stroke-linecap="round"/><path d="M-24 62 q3 -8 6 0 M-6 63 q3 -11 6 0 M12 62 q3 -9 6 0" stroke="#ffd66b" stroke-width="4" fill="none" stroke-linecap="round"/></g>`;
+    stage.appendChild(flameG);
+    return g;
+  }
+  function startHeat(){
+    clearStage();
+    buttons.heat.classList.remove('next');
+    drawStove();
+    pot.fill = 0;
+
+    // 퓨레가 든 믹서기 (드래그해서 붓기) — 망고갈기 믹서 비주얼 재사용
+    const useMixerVis = !!ASSETS.mixer;
+    const jg = mixerGeom(.6);
+    const jarFillFrac = .78;
+    const jarMixerHTML = (rectId)=> `<g class="floaty">
+      <g id="jarTiltG">
+        <g id="jarG">
+          <mask id="${rectId}Clip"><image href="${ASSETS.mixer_inner_clippingmask}" x="${jg.maskX}" y="${jg.maskY}" width="${jg.maskW}" height="${jg.maskH}" preserveAspectRatio="xMidYMid meet"/></mask>
+          <g><image href="${ASSETS.mixer}" x="${-jg.mixerW/2}" y="${-jg.mixerH/2+jg.mixerYOff}" width="${jg.mixerW}" height="${jg.mixerH}" preserveAspectRatio="xMidYMid meet"/></g>
+          <g mask="url(#${rectId}Clip)">
+            <g transform="translate(${jg.contentOffX},${jg.contentOffY})">
+              <rect id="${rectId}" x="${-50*jg.scale}" y="${30*jg.scale - 88*jg.scale*jarFillFrac}" width="${100*jg.scale}" height="${88*jg.scale*jarFillFrac}" fill="url(#pureeG)"/>
+            </g>
+          </g>
+          <g>${glassLayersHTML(jg.maskX, jg.maskY, jg.maskW, jg.maskH)}</g>
+        </g>
+      </g>
+    </g>`;
+    const jarVectorHTML = (rectId)=> `<g class="floaty">
+      <g id="jarTiltG">${artHTML('jar_puree', 76, 100, .5, .5, `
+        <clipPath id="${rectId}Clip"><path d="M-26 -40 h52 l-8 58 h-36 Z"/></clipPath>
+        <path d="M-26 -40 h52 l-8 58 h-36 Z" fill="#eaf5fb" stroke="#bcd9ea" stroke-width="3"/>
+        <g clip-path="url(#${rectId}Clip)"><rect id="${rectId}" x="-28" y="-24" width="56" height="44" fill="url(#pureeG)"/></g>
+        <path d="M26 -38 q16 3 13 20 q-2 12 -13 13" fill="none" stroke="#bcd9ea" stroke-width="5" stroke-linecap="round"/>`)}
+      </g>
+    </g>`;
+
+    // 퓨레가 든 믹서기 (드래그해서 계속 붓기 — 틀에 붓기 단계와 동일한 방식)
+    const jar = el('g',{transform:'translate(76,162)'});
+    jar.innerHTML = useMixerVis ? jarMixerHTML('jar2Fill') : jarVectorHTML('jar2Fill');
+    stage.appendChild(jar);
+    const fullH = useMixerVis ? 88*jg.scale*jarFillFrac : 44;
+    const bottomY = useMixerVis ? 30*jg.scale : 20;
+    const potFill = $('#potFill');
+    let pouring = null, done = false;
+    draggable(jar, {
+      noBlip:true,
+      onGrab:()=>{ playClick(); },
+      onMove:(pt)=>{
+        if(done) return;
+        const tilt = jar.querySelector('#jarTiltG');
+        if(dist(pt.x, pt.y, 200, 200) < 90){
+          tilt.setAttribute('transform','rotate(-64)');
+          if(!pouring){
+            blip(420,.3,'sine',.06);
+            pouring = setInterval(()=>{
+              if(done){ clearInterval(pouring); return; }
+              pot.fill = Math.min(.8, pot.fill + .028);
+              potFill.setAttribute('y', -41.5 - 60*pot.fill);
+              potFill.setAttribute('height', 60*pot.fill);
+              setBar((pot.fill/.8) * (1/3));
+              const rest = jar.querySelector('#jar2Fill');
+              if(rest){
+                const remain = fullH * (1 - pot.fill/.8);
+                rest.setAttribute('height', remain);
+                rest.setAttribute('y', bottomY - remain);
+              }
+              if(pot.fill >= .8){
+                done = true; clearInterval(pouring); pouring = null;
+                jar.remove();
+                say('노브를 꾹 눌러 데워요! 초록 구간에서 손을 떼야 해요 🔥', 4200);
+                enableKnob();
+              }
+            }, 80);
+          }
+        } else {
+          tilt.setAttribute('transform','');
+          if(pouring){ clearInterval(pouring); pouring = null; }
+        }
+      },
+      onDrop:()=>{
+        const tilt = jar.querySelector('#jarTiltG');
+        if(tilt) tilt.setAttribute('transform','');
+        if(pouring){ clearInterval(pouring); pouring = null; }
+      }
+    });
+    say('망고 퓨레를 냄비 위로 가져가서 부어요!', 3600);
+  }
+  function enableKnob(){
+    // 온도 게이지
+    const gauge = el('g',{transform:'translate(352,120)'});
+    gauge.innerHTML = `
+      <rect x="-11" y="0" width="22" height="170" rx="11" fill="#fff" stroke="#e0cdb2" stroke-width="3"/>
+      <rect id="tempFill" x="-6" y="165" width="12" height="0" rx="5" fill="#ff7043"/>
+      <line x1="-11" y1="${165-143*.66}" x2="11" y2="${165-143*.66}" stroke="#e0824a" stroke-width="2.5"/>
+      <text x="0" y="-8" text-anchor="middle" font-size="14" fill="#c09a6a" font-family="CookieRun">온도</text>`;
+    stage.appendChild(gauge);
+    // 노브
+    const knob = el('g',{transform:'translate(200,396)', style:'cursor:pointer'});
+    knob.innerHTML = `
+      <g id="knobImg">${artHTML('knob', 45, 45, .5, .5, `
+        <circle r="26" fill="#aab0ba" stroke="#8a8f98" stroke-width="4"/>
+        <rect x="-4" y="-20" width="8" height="18" rx="4" fill="#5a5f68"/>`)}</g>
+      <text y="44" text-anchor="middle" font-size="14" fill="#c09a6a" font-family="CookieRun">꾹 누르고 있기!</text>
+    `;
+    stage.appendChild(knob);
+
+    let temp = 0, heating = false, iv = null;
+    const tempFill = gauge.querySelector('#tempFill');
+    const flame = $('#flameG');
+    const fireCenter = $('#fireCenter'), fireLeft = $('#fireLeft'), fireRight = $('#fireRight');
+    const stoveAudio = new Audio('assets/sound/stove.mp3');
+    stoveAudio.loop = true; stoveAudio.volume = 0.5;
+    const ZONE = [.66, .87]; // 성공 구간 (게이지 22~54px 영역과 일치)
+    const render = ()=>{
+      const h = 143 * temp;
+      tempFill.setAttribute('y', 165 - h);
+      tempFill.setAttribute('height', h);
+      if(fireCenter){
+        fireCenter.setAttribute('opacity', temp>0 ? '1':'0');
+        fireLeft.setAttribute('opacity', temp>.1 ? '1':'0');
+        fireRight.setAttribute('opacity', temp>.2 ? '1':'0');
+      } else {
+        flame.setAttribute('opacity', heating? '1':'0');
+      }
+      const knobImg = knob.querySelector('#knobImg');
+      knobImg.setAttribute('transform', `rotate(${270 * temp})`);
+    };
+    const stopHeat = ()=>{
+      if(!heating) return;
+      heating = false; clearInterval(iv); render();
+      stoveAudio.pause();
+      if(temp >= ZONE[0] && temp <= ZONE[1]){
+        // 성공!
+        S.mode = null;
+        knob.remove(); gauge.remove();
+        if(fireCenter){
+          fireCenter.setAttribute('opacity','0');
+          fireLeft.setAttribute('opacity','0');
+          fireRight.setAttribute('opacity','0');
+        } else {
+          flame.setAttribute('opacity','0');
+        }
+        steamFx(200, 205);
+        say(`끓기 직전, 완벽해요!
+설탕 없이 저당 알룰로스로 달콤한 퓨레 완성 ♨️`);
+        setTimeout(()=>{ say('불린 젤라틴을 넣고 저을 차례! 💧'); startGelMix(); }, 1700);
+      } else if(temp < ZONE[0]){
+        say('아직 미지근해요~ 조금 더 데워요!', 2200);
+      }
+    };
+    knob.addEventListener('pointerdown', e=>{
+      knob.setPointerCapture(e.pointerId);
+      heating = true;
+      playClick();
+      stoveAudio.currentTime = 0; stoveAudio.play().catch(()=>{});
+      iv = setInterval(()=>{
+        temp += .012;
+        setBar(1/3 + temp*(1/3));
+        if(temp > ZONE[0] && temp < ZONE[1] && Math.random()<.35) bubFx(170+Math.random()*60, 250, '#ffd9a8');
+        if(temp >= 1){
+          // 끓어 넘침!
+          clearInterval(iv); heating = false; stoveAudio.pause();
+          for(let i=0;i<8;i++) setTimeout(()=>bubFx(150+Math.random()*100, 240, '#ffc879'), i*90);
+          say(`앗!! 끓어 넘치기 직전!
+불을 끄고 다시… 💦`, 2800);
+          temp = .4; setBar(1/3 + temp*(1/3)); render();
+        }
+        render();
+      }, 60);
+    });
+    const release = ()=>stopHeat();
+    knob.addEventListener('pointerup', release);
+    knob.addEventListener('pointercancel', release);
+    S.mode = 'knob';
+  }
+
+  // ============================================================
+  // STEP 3 계속 : 젤라틴 섞기 — 꽉 짜서 퐁당, 스푼으로 빙글빙글 (끓이기 단계에 이어서 진행)
+  // ============================================================
+  function startGelMix(){
+    // 불린 젤라틴 (작은 볼 안)
+    const gbowl = el('g',{transform:'translate(100,425)'});
+    gbowl.innerHTML = artHTML('bowl_cold', 252, 168, .5, .32, `
+      <path d="M-34 -4 a34 34 0 0 0 68 0 Z" fill="#e8f4fb" stroke="#bcd9ea" stroke-width="3"/>
+      <ellipse cx="0" cy="-4" rx="34" ry="8" fill="#bfe4f7"/>`);
+    stage.appendChild(gbowl);
+    const blob = el('g',{transform:'translate(95,417)', opacity:'0.7', id:'blobDrag'});
+    blob.innerHTML = `<g class="floaty">${artHTML('gelatin_blob',  104, 84, .5, .5, `
+      <path d="M-18 0 q-4 -14 8 -16 q4 -8 14 -4 q12 -2 12 10 q8 8 -4 14 q-6 8 -16 4 q-12 4 -14 -8 Z" fill="#fbf0d8" stroke="#e8d9b8" stroke-width="2.5" opacity=".9"/>
+      <circle cx="-4" cy="-4" r="2.5" fill="#fff" opacity=".8"/>`)}
+    </g>`;
+    stage.appendChild(blob);
+    let squeezeIv = null, dropped = false;
+    draggable(blob, {
+      onGrab:()=>{
+        say('물기를 꾹 짜면서 냄비로! 💧', 2600);
+        squeezeIv = setInterval(()=>{
+          if(!blob._isDragging()){ return; }
+          dropFx(blob._x + (Math.random()*10-5), blob._y + 14, '#bfe4f7', '#9fcbe6', 'fx_drop_water');
+          blip(820,.04,'sine',.4);
+        }, 240);
+      },
+      onDrop:(pt)=>{
+        clearInterval(squeezeIv); squeezeIv = null;
+        const preview = $('#blobPreview');
+        if(preview) preview.remove();
+        if(!dropped && dist(pt.x, pt.y, 200, 250) < 85){
+          dropped = true; blob.remove();
+          const popAudio = new Audio('assets/sound/bubble-pop.mp3');
+          popAudio.volume = 0.6; popAudio.play().catch(()=>{});
+          bubFx(200, 250, '#ffd9a8');
+          // 냄비 속 젤라틴 덩어리 (potClip으로 클리핑됨)
+          const bits = $('#potBits');
+          const lump = el('g',{id:'gelLump', style:'transition:opacity .2s ease'});
+          if(ASSETS.gelatin_blob) lump.appendChild(imgNode('gelatin_blob', 0, -47, 104, 84));
+          else lump.appendChild(el('ellipse',{cx:0, cy:-47, rx:52, ry:42, fill:'#fbf0d8', opacity:.95}));
+          bits.appendChild(lump);
+          setTimeout(()=>{
+            say(`스푼으로 빙글빙글~
+완전히 녹을 때까지 저어주세요!`, 3600);
+            enableStir();
+          }, 700);
+        }
+      }
+    });
+    say('젤라틴을 잡아 냄비에 퐁당 넣어주세요!', 3800);
+  }
+  function enableStir(){
+    // 나무 스푼
+    const spoon = el('g',{transform:'translate(330,366)'});
+    spoon.innerHTML = `<g class="floaty">${ASSETS.wood_spoon ? imgTag('wood_spoon', 110, 110, .5, .85) : `<g transform="rotate(30)">
+      <rect x="-4" y="-72" width="8" height="46" rx="4" fill="#c98d5e"/>
+      <ellipse cx="0" cy="-14" rx="12" ry="16" fill="#e8b877"/>
+      <ellipse cx="0" cy="-16" rx="8" ry="11" fill="#f4d4a8"/>
+    </g>`}</g>`;
+    stage.appendChild(spoon);
+    let energy = 0, last = null;
+    const target = 1000;
+    const lump = $('#gelLump');
+    const potFill = $('#potFill');
+    let wobbleAngle = 0;
+    let stickyToggle = false;
+    const playSticky = ()=>{
+      const a = new Audio(stickyToggle ? 'assets/sound/sticky-PRESS-02.mp3' : 'assets/sound/sticky-PRESS-01.mp3');
+      stickyToggle = !stickyToggle;
+      a.volume = 0.5; a.play().catch(()=>{});
+    };
+    const inStirZone = (x,y)=> Math.pow((x-200)/80,2) + Math.pow((y-260)/48,2) <= 1;
+    draggable(spoon, {
+      noBlip:true,
+      onGrab:()=>{ playClick(); },
+      onMove:(p)=>{
+        // 냄비 안(타원 영역)에서만 저어짐
+        if(inStirZone(p.x, p.y)){
+          if(last){
+            const d = dist(p.x, p.y, last.x, last.y);
+            energy += d;
+            const pr = Math.min(1, energy/target);
+            setBar(2/3 + pr*(1/3));
+            lump.setAttribute('opacity', String(1-pr));
+            wobbleAngle += Math.min(d, 8)*.02;
+            lump.setAttribute('transform', `translate(${Math.sin(wobbleAngle)*24},0)`);
+            if(Math.random()<.3) bubFx(p.x, p.y-6, '#ffd9a8');
+            if(Math.random()<.2) playSticky();
+            if(pr>=1){
+              spoon.remove(); lump.remove();
+              // 윤기나는 퓨레
+              potFill.setAttribute('fill','url(#pureeG)');
+              const gloss = el('ellipse',{cx:-24, cy:8, rx:22, ry:5, fill:'#fff', opacity:.5});
+              $('#potBits').appendChild(gloss);
+              say(`반들반들~
+젤라틴이 완전히 녹아 *쫀득함이 완성됐어요!*`);
+              markDone('heat');
+              setTimeout(()=>{ activate('pour'); say(`이제 몰드에 부을 시간!
+틀에 붓기 버튼을 눌러주세요~`); }, 1700);
+            }
+          }
+          last = p;
+        } else last = null;
+      },
+      onDrop:()=>{ last = null; }
+    });
+  }
+
+  // ============================================================
+  // STEP 4 : 틀에 붓기 — 냄비 기울여 붓고, 막대 콕콕
+  // ============================================================
+  const MOLD_X = [152, 200, 248];
+  function startPour(){
+    clearStage();
+    buttons.pour.classList.remove('next');
+
+    // 아이스크림 몰드 (3구)
+    const mold = el('g',{id:'moldG', transform:'translate(0,0)'});
+    const moldX = 110, moldY = 276, moldW = 180, moldH = 134;
+    let shell = `<rect x="118" y="284" width="164" height="118" rx="16" fill="#9fd8ef" stroke="#7cbfdd" stroke-width="4"/>`;
+    MOLD_X.forEach((x)=>{
+      shell += `<rect x="${x-17}" y="296" width="34" height="94" rx="14" fill="#e8f6fc" stroke="#7cbfdd" stroke-width="3"/>`;
+    });
+    const moldShellHTML = ASSETS.mold
+      ? `<image href="${ASSETS.mold}" x="${moldX}" y="${moldY}" width="${moldW}" height="${moldH}" preserveAspectRatio="xMidYMid meet"/>`
+      : shell;
+    let cavityHTML;
+    if(ASSETS.mold_clippingmask){
+      let fills = '';
+      MOLD_X.forEach((x,i)=>{
+        const w = i===0 ? 57 : 60;
+        fills += `<rect id="cavFill${i}" x="${x-30}" y="390" width="${w}" height="0" fill="url(#pureeG)"/>`;
+      });
+      cavityHTML = `
+        <mask id="moldClip"><image href="${ASSETS.mold_clippingmask}" x="${moldX}" y="${moldY}" width="${moldW}" height="${moldH}" preserveAspectRatio="xMidYMid meet" filter="url(#maskBoost)"/></mask>
+        <g mask="url(#moldClip)">${fills}</g>`;
+    } else {
+      let clips = '';
+      MOLD_X.forEach((x,i)=>{
+        clips += `
+          <clipPath id="cavClip${i}"><rect x="${x-17}" y="296" width="34" height="94" rx="14"/></clipPath>
+          <g clip-path="url(#cavClip${i})"><rect id="cavFill${i}" x="${x-17}" y="390" width="34" height="0" fill="url(#pureeG)"/></g>`;
+      });
+      cavityHTML = clips;
+    }
+    mold.innerHTML = `<g id="moldShell">${moldShellHTML}</g>` + cavityHTML;
+    stage.appendChild(mold);
+
+    // 퓨레 냄비 (드래그해서 붓기)
+    const p2 = el('g',{transform:'translate(86,150)'});
+    const pps = .6;
+    p2.innerHTML = `<g class="floaty">
+      <g id="pourPotG">
+        <defs><clipPath id="pourPotClip"><ellipse cx="0" cy="${-71.5*pps}" rx="${94*pps}" ry="${30*pps}"/></clipPath></defs>
+        <g id="pourPotBack"><image href="${ASSETS.pot}" x="${-192*pps}" y="${-114*pps}" width="${384*pps}" height="${164*pps}" preserveAspectRatio="xMidYMid meet"/></g>
+        <g clip-path="url(#pourPotClip)">
+          <rect id="pourPotFill" x="${-95*pps}" y="${-41.5*pps}" width="${190*pps}" height="0" fill="url(#pureeG)"/>
+        </g>
+      </g>
+    </g>`;
+    stage.appendChild(p2);
+    const pourPotFill = p2.querySelector('#pourPotFill');
+    pourPotFill.setAttribute('y', (-41.5-48)*pps);
+    pourPotFill.setAttribute('height', 48*pps);
+
+    let total = 0, pouring = null, done = false;
+    const overMold = (x,y)=> x>110 && x<290 && y>190 && y<300;
+    const renderFills = ()=>{
+      MOLD_X.forEach((x,i)=>{
+        const f = Math.max(0, Math.min(1, total*3 - i));
+        const c = document.getElementById('cavFill'+i);
+        c.setAttribute('y', 390 - 93*f);
+        c.setAttribute('height', 93*f);
+      });
+      setBar(total);
+    };
+    draggable(p2, {
+      noBlip:true,
+      onGrab:()=>{ playClick(); },
+      onMove:(pt)=>{
+        if(done) return;
+        const inner = p2.querySelector('#pourPotG');
+        const spoutX = pt.x - 90*pps;
+        if(overMold(spoutX, pt.y)){
+          inner.setAttribute('transform','rotate(-38)');
+          if(!pouring){
+            blip(420,.15,'sine',.05);
+            pouring = setInterval(()=>{
+              if(done) { clearInterval(pouring); return; }
+              total = Math.min(1, total + .07);
+              const rest = p2.querySelector('#pourPotFill');
+              if(rest){
+                const remain = 48*pps*(1-total);
+                rest.setAttribute('height', remain);
+                rest.setAttribute('y', -41.5*pps-remain);
+              }
+              renderFills();
+              if(total>=1){
+                done = true; clearInterval(pouring); pouring = null;
+                p2.remove();
+                say(`가득 찼어요!
+이제 막대를 콕콕 꽂아주세요!`, 3200);
+                setBar(0);
+                enableSticks();
+              }
+            }, 600);
+          }
+        } else {
+          inner.setAttribute('transform','');
+          if(pouring){ clearInterval(pouring); pouring = null; }
+        }
+      },
+      onDrop:()=>{
+        const inner = p2.querySelector('#pourPot');
+        if(inner) inner.setAttribute('transform','');
+        if(pouring){ clearInterval(pouring); pouring = null; }
+      }
+    });
+    say('냄비의 퓨레를 몰드에 부어주세요!', 3800);
+  }
+  function enableSticks(){
+    let placed = 0;
+    const taken = [false,false,false];
+    const STICK_X = [144, 200, 255];
+    const STICK_Y = 398;
+    // 꽂는 위치 가이드 (클릭 방해 안 하도록 pointer-events 차단) — 실제 최종 위치(STICK_X, STICK_Y)와 일치
+    STICK_X.forEach((x,i)=>{
+      stage.appendChild(el('rect',{x:x-5, y:STICK_Y-24, width:10, height:48, rx:4, fill:'none', stroke:'#c9a76a','stroke-width':2,'stroke-dasharray':'4 4', id:'stickSlot'+i, 'pointer-events':'none'}));
+    });
+    const overMoldArea = (x,y)=> x>104 && x<296 && y>350 && y<430;
+    const homes = [{x:60,y:230},{x:200,y:230},{x:340,y:230}];
+    homes.forEach((p)=>{
+      const g = el('g',{transform:`translate(${p.x},${p.y})`});
+      g.innerHTML = `<g class="floaty"><g transform="rotate(180)">${artHTML('stick', 16, 56, .5, .5, `<rect x="-5" y="-26" width="10" height="52" rx="5" fill="#e8c99a" stroke="#c9a76a" stroke-width="2"/>`)}</g></g>`;
+      stage.appendChild(g);
+      draggable(g, {
+        noBlip:true,
+        onGrab:()=>{ playClick(); },
+        onDrop:(pt)=>{
+          // 몰드 근처에 놓으면 가장 가까운 빈 칸에 무조건 꽂힘
+          let best = null, bd = 1e9;
+          STICK_X.forEach((x,i)=>{
+            if(taken[i]) return;
+            const d = dist(pt.x, pt.y, x, STICK_Y);
+            if(d < bd){ bd = d; best = i; }
+          });
+          const nearSlot = best !== null && bd < 70;
+          const onMold = best !== null && overMoldArea(pt.x, pt.y);
+          if(nearSlot || onMold){
+            taken[best] = true; placed++;
+            setPos(g, STICK_X[best], STICK_Y);
+            g.innerHTML = `<g transform="rotate(180)">${artHTML('stick', 16, 56, .5, .5, `<rect x="-5" y="-26" width="10" height="52" rx="5" fill="#e8c99a" stroke="#c9a76a" stroke-width="2"/>`)}</g>`;
+            g.style.pointerEvents = 'none';
+            const slot = document.getElementById('stickSlot'+best); slot && slot.remove();
+            playClick();
+            setBar(placed/3);
+            if(placed===3){
+              say(`준비 끝!
+망고가 가득 들어있는 쫀득바, 이제 얼리기만 남았어요 ❄️`);
+              markDone('pour');
+              setTimeout(()=>{ activate('freeze'); say(`몰드를 냉동실에 쏙!
+얼리기 버튼을 눌러요`); }, 1700);
+            }
+          } else {
+            // 빗나가면 트레이로 복귀 (막대가 사라지거나 끼지 않도록)
+            setPos(g, p.x, p.y);
+          }
+        }
+      });
+    });
+  }
+
+  // ============================================================
+  // STEP 5 : 얼리기 — 냉동실에 넣고 5시간 꽁꽁!
+  // ============================================================
+  function startFreeze(){
+    clearStage();
+    buttons.freeze.classList.remove('next');
+
+    // 냉동실 유리 3레이어 영역 (화면 중앙, 같은 위치/크기로 겹쳐 쌓임)
+    const frW = 324, frH = 604, frX = 200 - frW/2, frY = 241 - frH/2 - 40;
+    const useFreezerGlass = !!(ASSETS.freezer_glass_01basic && ASSETS.freezer_glass_02overlay && ASSETS.freezer_glass_03colorburn);
+    const freezerGlassImg = (key, blend, opacity=1)=> ASSETS[key]
+      ? `<image href="${ASSETS[key]}" x="${frX}" y="${frY}" width="${frW}" height="${frH}" preserveAspectRatio="xMidYMid meet" style="mix-blend-mode:${blend};opacity:${opacity}"/>`
+      : '';
+
+    // 완성 직전 몰드 (막대 포함)
+    const mold = el('g',{transform:'translate(110,362)'});
+    let inner;
+    if(ASSETS.mold_filled){
+      inner = `<g class="floaty">${imgTag('mold_filled', 128, 104, .5, .5)}</g>`;
+    } else if(ASSETS.mold && ASSETS.mold_clippingmask){
+      // 틀에 붓기 단계의 최종 상태(mold.png + mold_clippingmask.png + stick.png)를 그대로 재현
+      const cavXs = [-48, 0, 48];
+      const stickXs = [-56, 0, 55];
+      let fills = '';
+      cavXs.forEach((x,i)=>{
+        const w = i===0 ? 57 : 60;
+        fills += `<rect x="${x-30}" y="-46" width="${w}" height="94" fill="url(#pureeG)"/>`;
+      });
+      let sticksHTML = '';
+      stickXs.forEach((x)=>{
+        sticksHTML += `<g transform="translate(${x},55) rotate(180)">${artHTML('stick', 16, 56, .5, .5, `<rect x="-5" y="-26" width="10" height="52" rx="5" fill="#e8c99a" stroke="#c9a76a" stroke-width="2"/>`)}</g>`;
+      });
+      inner = `<g class="floaty"><g transform="scale(.93)">
+        <mask id="moldFilledClip"><image href="${ASSETS.mold_clippingmask}" x="-90" y="-67" width="180" height="134" preserveAspectRatio="xMidYMid meet" filter="url(#maskBoost)"/></mask>
+        <image href="${ASSETS.mold}" x="-90" y="-67" width="180" height="134" preserveAspectRatio="xMidYMid meet"/>
+        <g mask="url(#moldFilledClip)">${fills}</g>
+        ${sticksHTML}
+      </g></g>`;
+    } else {
+      inner = `<g class="floaty"><g transform="scale(.93)">
+        <rect x="-82" y="-58" width="164" height="118" rx="16" fill="#9fd8ef" stroke="#7cbfdd" stroke-width="4"/>`;
+      [-48,0,48].forEach((x)=>{
+        inner += `<rect x="${x-17}" y="-46" width="34" height="94" rx="14" fill="url(#pureeG)" stroke="#7cbfdd" stroke-width="3"/>
+                  <rect x="${x-5}" y="-72" width="10" height="30" rx="5" fill="#e8c99a" stroke="#c9a76a" stroke-width="2"/>`;
+      });
+      inner += `</g></g>`;
+    }
+    mold.innerHTML = inner;
+    stage.appendChild(mold);
+
+    // 냉동실 유리 3레이어 — 몰드보다 나중에 추가해서 몰드 위(맨 위)에 쌓임
+    const frGlass = el('g',{id:'frGlass', style:'pointer-events:none'});
+    frGlass.innerHTML = useFreezerGlass
+      ? freezerGlassImg('freezer_glass_01basic','normal',.85) + freezerGlassImg('freezer_glass_02overlay','overlay') + freezerGlassImg('freezer_glass_03colorburn','color-burn')
+      : (ASSETS.freezer ? `<image href="${ASSETS.freezer}" x="${frX}" y="${frY}" width="${frW}" height="${frH}" preserveAspectRatio="xMidYMid meet"/>` : `
+        <rect x="${frX+4}" y="${frY+6}" width="${frW-8}" height="${frH-6}" rx="14" fill="#f4f7fa" stroke="#c9d6e2" stroke-width="5" opacity=".9"/>
+        <text x="${frX+frW/2}" y="${frY+frH-16}" text-anchor="middle" font-size="16" font-family="CookieRun" fill="#8fb8d9">냉동실</text>`);
+    stage.appendChild(frGlass);
+
+    let placed = false;
+    draggable(mold, {
+      noBlip:true,
+      onGrab:()=>{ playClick(); },
+      onDrop:(pt)=>{
+        if(!placed && pt.x > frX+16 && pt.x < frX+frW-16 && pt.y > frY+20 && pt.y < frY+frH-20){
+          placed = true;
+          setPos(mold, frX+frW/2, frY+frH/2-40+30);
+          mold.style.pointerEvents='none';
+          playClick();
+          setTimeout(()=>{
+            blip(300,.12,'square',.05);
+            freezeTimer();
+          }, 400);
+        }
+      }
+    });
+    say('몰드를 잡아서 냉동실 안으로 쏙 넣어요!', 3600);
+
+    function freezeTimer(){
+      let h = 0;
+      const windAudio = new Audio('assets/sound/wind.mp3');
+      windAudio.loop = true; windAudio.volume = 0.5;
+      windAudio.play().catch(()=>{});
+      // 화면에 실제로 보이는 영역(뷰박스 0~460, stage가 -30 이동됨) 안에 고정 배치 — 냉동실 이미지 위, 안 겹치는 상단
+      const txtX = 200, txtY = 56;
+      const t = el('text',{x:txtX, y:txtY, 'text-anchor':'middle','font-size':22,'font-family':'CookieRun', fill:'#fff', stroke:'#3d7a9e','stroke-width':6,'paint-order':'stroke'});
+      frGlass.appendChild(t);
+      // 눈송이도 실제로 화면에 보이는 영역에서만 흩날리도록 (frY가 화면 밖일 수 있으므로 별도 지정)
+      const snowX0 = 70, snowX1 = 330, snowY0 = 70, snowY1 = 400;
+      const iv = setInterval(()=>{
+        h++;
+        t.textContent = `❄️ ${h}시간째 꽁꽁…`;
+        setBar(h/5);
+        blip(700+h*60,.06,'sine',.05);
+        // 눈송이 - 냉동실 유리 레이어와 같은 그룹에 쌓임, 흰색
+        for(let i=0;i<4;i++){
+          let sN;
+          if(ASSETS.fx_snow){ sN = imgNode('fx_snow', snowX0+Math.random()*(snowX1-snowX0), snowY0+Math.random()*(snowY1-snowY0), 14, 14); }
+          else { sN = el('text',{x:snowX0+Math.random()*(snowX1-snowX0), y:snowY0+Math.random()*(snowY1-snowY0), 'font-size':10+Math.random()*8, fill:'#fff', opacity:0}); sN.textContent='❄'; }
+          const s = sN; s.classList.add('snow');
+          s.style.animationDelay = (Math.random()*.4)+'s';
+          frGlass.appendChild(s); setTimeout(()=>s.remove(), 2300);
+        }
+        if(h>=5){
+          clearInterval(iv);
+          windAudio.pause();
+          setTimeout(()=>{ t.remove(); openFreezer(); }, 900);
+        }
+      }, 800);
+    }
+    function openFreezer(){
+      say(`꽁꽁 얼었어요!
+망고 쫀득바의 완성~!! 🥭`, 3000);
+      setTimeout(showBars, 700);
+    }
+  }
+  function showBars(){
+    clearStage();
+    markDone('freeze');
+    activate('done'); setBar(1);
+    $('#shelf').style.display = 'none';
+    // 완성된 쫀득바 3개
+    const useFinalBarImgs = !!(ASSETS.final_mango_bar && ASSETS.final_mango_bar_stick);
+    const localPoint = (g, clientX, clientY)=>{
+      const pt = svg.createSVGPoint(); pt.x = clientX; pt.y = clientY;
+      return pt.matrixTransform(g.getScreenCTM().inverse());
+    };
+    [-1,0,1].forEach((k,i)=>{
+      const x = 200 + k*106, y = 240 - (k===0 ? 25 : 0);
+      const mid = 'biteM'+i;
+      const mask = el('mask',{id:mid});
+      mask.appendChild(el('rect',{x:-50, y:-90, width:100, height:190, fill:'#fff'}));
+      defs.appendChild(mask);
+      // 바깥 g = 위치(transform 속성), 안쪽 g = 등장 애니메이션(CSS transform) — 분리 필수!
+      const g = el('g',{transform:`translate(${x},${y}) rotate(${k*7})`, style:'cursor:pointer'});
+      const inner = el('g',{});
+      if(useFinalBarImgs){
+        inner.innerHTML = `
+          <g id="barStick${i}">${imgTag('final_mango_bar_stick', 84, 186, .5, .48)}</g>
+          <g mask="url(#${mid})">${imgTag('final_mango_bar', 84, 186, .5, .48)}</g>
+        `;
+      } else {
+        inner.innerHTML = `
+          <g mask="url(#${mid})">${ASSETS.bar_done ? imgTag('bar_done', 84, 186, .5, .48) : `
+            <rect x="-8" y="40" width="16" height="66" rx="8" fill="#e8c99a" stroke="#c9a76a" stroke-width="2.5"/>
+            <rect x="-30" y="-74" width="60" height="122" rx="26" fill="url(#barG)" stroke="#e88a1e" stroke-width="4"/>
+            <rect x="-18" y="-62" width="12" height="86" rx="6" fill="#ffd28a" opacity=".8"/>
+            <circle cx="12" cy="-48" r="3" fill="#fff" opacity=".85"/>
+            <circle cx="6" cy="10" r="2.4" fill="#fff" opacity=".7"/>
+            <circle cx="-8" cy="30" r="2" fill="#fff" opacity=".7"/>`}
+          </g>`;
+      }
+      inner.classList.add('popin');
+      inner.style.animationDelay = (i*.18)+'s';
+      g.appendChild(inner);
+      stage.appendChild(g);
+      // 한 입 냠! — 클릭한 지점만 원 모양으로 지워짐(무한 반복 가능)
+      g.addEventListener('pointerdown', (e)=>{
+        const p = localPoint(g, e.clientX, e.clientY);
+        const bc = el('circle',{cx:p.x, cy:p.y, r:15, fill:'#000'});
+        document.getElementById(mid).appendChild(bc);
+        const eatAudio = new Audio('assets/sound/eating-sound.mp3');
+        eatAudio.volume = 0.6; eatAudio.play().catch(()=>{});
+        say('냠! 쫀득쫀득~ 생망고 맛이 가득해요 🤤', 2200);
+      });
+    });
+    // 반짝이
+    const sl = $('#sparkLayer');
+    for(let i=0;i<16;i++){
+      const x = 90 + Math.random()*220, y = 120 + Math.random()*230;
+      const s = ASSETS.sparkle
+        ? imgNode('sparkle', x, y, 18, 18)
+        : el('path',{d:`M${x} ${y-8} L${x+2.4} ${y-2.4} L${x+8} ${y} L${x+2.4} ${y+2.4} L${x} ${y+8} L${x-2.4} ${y+2.4} L${x-8} ${y} L${x-2.4} ${y-2.4} Z`, fill:'#fff', opacity:0});
+      s.setAttribute('opacity','0');
+      s.classList.add('spark');
+      s.style.animationDelay = (Math.random()*1.4)+'s';
+      sl.appendChild(s);
+    }
+    blip(660,.12,'triangle'); setTimeout(()=>blip(830,.12,'triangle'),140); setTimeout(()=>blip(990,.2,'triangle'),300);
+    const twinkleAudio = new Audio('assets/sound/twinklesparkle.mp3');
+    twinkleAudio.volume = 0.6; twinkleAudio.play().catch(()=>{});
+    say('*생망고 20% · 저당 망고 쫀득바* 완성~!\n쫀득바를 눌러 한 입 냠 해보세요✨', 0);
+    $('#finish').classList.add('show');
+  }
+  $('#restart').addEventListener('click', ()=>location.reload());
+
+  // ---------- buttons ----------
+  buttons.gel.addEventListener('click', ()=>{ if(S.step==='gel') startGel(); });
+  buttons.blend.addEventListener('click', ()=>{ if(S.step==='blend') startBlend(); });
+  buttons.heat.addEventListener('click', ()=>{ if(S.step==='heat') startHeat(); });
+  buttons.pour.addEventListener('click', ()=>{ if(S.step==='pour') startPour(); });
+  buttons.freeze.addEventListener('click', ()=>{ if(S.step==='freeze') startFreeze(); });
+
+  // ---------- boot ----------
+  Object.values(buttons).forEach(b=>b.disabled = true);
+  applyAssets();
+
+  // 배경음악 - 첫 화면부터 반복 재생 (자동재생 차단 시 첫 클릭에 시작)
+  const bgmAudio = new Audio('assets/sound/bgm.mp3');
+  bgmAudio.loop = true; bgmAudio.volume = 0.35;
+  const startBgm = ()=>{ bgmAudio.play().catch(()=>{}); };
+  startBgm();
+  document.addEventListener('pointerdown', startBgm, {once:true});
+
+  const intro = $('#intro'), howto = $('#howto'), readygo = $('#readygo');
+  const playPop = ()=>{ const a = new Audio('assets/sound/bubble-pop-07.mp3'); a.volume = 0.6; a.play().catch(()=>{}); };
+  const playReadyGo = ()=>{ const a = new Audio('assets/sound/bubble-pop-04.mp3'); a.volume = 0.6; a.play().catch(()=>{}); };
+  $('#btnHow').addEventListener('click', ()=>{ playPop(); howto.hidden = false; });
+  $('#btnBack').addEventListener('click', ()=>{ playClick(); howto.hidden = true; });
+  $('#btnPlay').addEventListener('click', ()=>{
+    intro.style.display = 'none';
+    readygo.innerHTML = '<img src="assets/Ready.png" alt="Ready">';
+    readygo.classList.add('pop');
+    playReadyGo();
+    setTimeout(()=>{
+      readygo.classList.remove('pop'); void readygo.offsetWidth;
+      readygo.innerHTML = '<img src="assets/Start.png" alt="Start">';
+      readygo.classList.add('pop');
+      playReadyGo();
+      setTimeout(()=>{
+        readygo.classList.remove('pop'); readygo.innerHTML = '';
+        activate('gel');
+        say(`*생망고 20%, 저당 알룰로스*로 만드는 건강한 쫀득바!
+먼저 젤라틴 버튼을 눌러요! 🥭`, 4500);
+      }, 1000);
+    }, 1200);
+  });
+})();
+</script>
+</body>
+</html>
