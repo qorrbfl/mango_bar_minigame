@@ -85,7 +85,7 @@
 
   .bubble{
     position:absolute; left:21px; right:21px; top:90px; transform:scale(.9); transform-origin:top center;
-    background:#fff; border:3px solid #ffd6a0; color:#000;
+    background:#fff; border:3px solid #B46522; color:#000;
     padding:7px 14px; border-radius:16px; font-size:17px; white-space:pre-line;
     text-align:center; line-height:1.4;
     box-shadow:none; opacity:0; transition:all .25s ease; pointer-events:none; z-index:5;
@@ -99,7 +99,7 @@
   .bubbleShadow.show{opacity:1; transform:scale(1);}
   .bubble.show{opacity:1; transform:scale(1);}
   .bubble::after{content:""; position:absolute; left:50%; bottom:-9px; transform:translateX(-50%);
-    border:8px solid transparent; border-top-color:#ffd6a0; border-bottom:0;}
+    border:8px solid transparent; border-top-color:#B46522; border-bottom:0;}
 
   .count{position:absolute; left:50%; top:44%; transform:translate(-50%,-50%);
     font-size:74px; color:#fff; text-shadow:0 3px 0 var(--accent-dark), 0 6px 14px rgba(0,0,0,.2);
@@ -163,12 +163,12 @@
   }
   .finish.show{opacity:1;}
   .finish h2{
-    position:absolute; left:50%; top:230px; transform:translateX(-50%); white-space:nowrap;
+    position:absolute; left:50%; top:180px; transform:translateX(-50%); white-space:nowrap;
     margin:0; font-size:34px; color:var(--accent-dark);
     -webkit-text-stroke:12px #fff; paint-order:stroke fill;
   }
   .finish button{
-    position:absolute; left:50%; bottom:164px; transform:translateX(-50%);
+    position:absolute; left:50%; bottom:50px; transform:translateX(-50%);
     font-family:inherit; font-size:22px; font-weight:900; border:0; color:#fff;
     background:transparent; padding:26px 34px; cursor:pointer; box-shadow:none; isolation:isolate;
     pointer-events:none;
@@ -216,21 +216,23 @@
   .ibtn:active::before{ transform:rotate(30deg) scale(.95); }
   .howto{
     position:absolute; inset:0; background:rgba(0,0,0,.4); z-index:2;
-    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0px;
   }
   .howto[hidden]{display:none;}
   .howtoCard{
-    background:#fffaf0; border-radius:24px; padding:24px 26px; max-width:88%;
+    background:#fffaf0; border-radius:24px; padding:20px 23px; max-width:88%;
     border:2px solid #50280E; box-shadow:none;
     display:flex; flex-direction:column; align-items:center;
   }
   .howto h2{margin:0 0 6px; color:var(--accent-dark); font-size:28px;}
-  .howto ol{list-style:none; text-align:left; font-size:18px; line-height:2; color:var(--text); margin:8px 0 18px; padding:0;}
+  .howto ol{list-style:none; text-align:left; font-size:15px; line-height:1.5; color:var(--text); margin:8px 0 18px; padding:0;}
   .readygo{
     position:absolute; left:50%; top:44%; transform:translate(-50%,-50%);
     width:360px; max-width:70%; pointer-events:none; z-index:250;
     opacity:0;
   }
+  .howto ol li {
+  margin-bottom: 16px;}
   .readygo img{display:block; width:100%; height:auto;}
   .readygo.pop{animation:cnt .95s ease forwards;}
   @media (prefers-reduced-motion:reduce){ *{animation-duration:.01s !important;} }
@@ -323,13 +325,13 @@
     </div>
     <div class="howto" id="howto" hidden>
       <div class="howtoCard">
-        <h2>🍳 게임 방법</h2>
+        <h2>게임 방법</h2>
         <ol>
-          <li>① 쫀득함의 비밀, 판 젤라틴을 찬물에 퐁당 불려요</li>
-          <li>② 생망고·저당 알룰로스·레몬을 믹서기에 넣고 갈아요</li>
-          <li>③ 망고 퓨레를 냄비에 붓고 끓인 뒤, 불린 젤라틴을 넣어 저어 쫀득하게 만들어요</li>
+          <li>① 쫀득함의 비밀,<br>ㅤ판 젤라틴을 찬물에 퐁당 불려주세요</li>
+          <li>② 생망고·저당 알룰로스·레몬을<br>ㅤ믹서기에 넣고 갈아주세요</li>
+          <li>③ 망고 퓨레를 냄비에 붓고 끓인 뒤,<br>ㅤ불린 젤라틴을 넣어 저어 쫀득하게 만들어요</li>
           <li>④ 퓨레를 몰드에 붓고 막대를 꽂아요</li>
-          <li>⑤ 냉동실에서 얼리면 생망고 20% 쫀득바 완성! 🍡</li>
+          <li>⑤ 냉동실에서 얼리면<br>ㅤ생망고가 들어간 저당 망고 쫀득바 완성!🥭</li>
         </ol>
         <button class="ibtn" id="btnBack">닫기</button>
       </div>
@@ -720,8 +722,7 @@ window.GAME_ASSETS = {
         noBlip:true,
         onGrab:()=>{
           playClick();
-          if(!mangoInfoShown){ mangoInfoShown = true; say(`이 망고는 쫀득바의
-*전체 함량의 20%*를 차지하는 진짜 *생망고*예요 🥭`, 3200); }
+          if(!mangoInfoShown){ mangoInfoShown = true; say(`이 망고는 쫀득바의 *전체 함량 20%*를\n차지하는 *진짜 생망고*예요 🥭`, 3200); }
         },
         onDrop:(pt)=>{
           if(dist(pt.x, pt.y, 200, 205) < 80){
@@ -753,8 +754,7 @@ window.GAME_ASSETS = {
       noBlip:true,
       onGrab:()=>{
         playClick();
-        if(!alluloseInfoShown){ alluloseInfoShown = true; say(`알룰로스는 설탕 대신 쓰는 *저당 감미료*예요!
-칼로리 걱정 뚝 🍯`, 3200); }
+        if(!alluloseInfoShown){ alluloseInfoShown = true; say(`*알룰로스*는 설탕 대신 쓰는 *저당 감미료*\n예요! 칼로리 걱정 뚝 🍯`, 3200); }
       },
       onDrop:(pt)=>{
         if(!sugar && dist(pt.x, pt.y, 200, 165) < 85){
@@ -855,7 +855,7 @@ window.GAME_ASSETS = {
             const lidFinal = el('image',{href:ASSETS.mixer_lid, x:-mixerW/2, y:-mixerH/2+mixerYOff, width:mixerW, height:mixerH, preserveAspectRatio:'xMidYMid meet'});
             bl.querySelector('#blJar').appendChild(lidFinal);
             setTimeout(()=>{
-              say('이제 믹서기를 빠르게 문질러 갈아요! 위이잉~ 🌀', 3600);
+              say('이제 믹서기를 빠르게 문질러 갈아요!\n위이잉~ 🌀', 3600);
               setBar(0);
               enableScrubBlend(bl, jarChunks);
             }, 500);
@@ -870,7 +870,7 @@ window.GAME_ASSETS = {
         setTimeout(()=>{
           setBar(0);
           if(ASSETS.mixer_lid) enableLid();
-          else { say('이제 믹서기를 빠르게 문질러 갈아요! 위이잉~ 🌀', 3600); enableScrubBlend(bl, jarChunks); }
+          else { say('이제 믹서기를 빠르게 문질러 갈아요!\n위이잉~ 🌀', 3600); enableScrubBlend(bl, jarChunks); }
         }, 500);
       }
     }
@@ -911,7 +911,7 @@ window.GAME_ASSETS = {
           jar.setAttribute('transform','');
           jarChunks.innerHTML='';
           stopVib();
-          say('곱게 갈렸어요! 생망고 20% 가득한 진짜 망고 퓨레 완성 🧡');
+          say('곱게 갈렸어요! 생망고 20% 가득한\n진짜 망고 퓨레 완성 🧡');
           markDone('blend');
           setTimeout(()=>{ activate('heat'); say('냄비에 부어서 데워볼까요? 끓이기 버튼!'); }, 1600);
         }
@@ -1027,7 +1027,7 @@ window.GAME_ASSETS = {
               if(pot.fill >= .8){
                 done = true; clearInterval(pouring); pouring = null;
                 jar.remove();
-                say('노브를 꾹 눌러 데워요! 초록 구간에서 손을 떼야 해요 🔥', 4200);
+                say('노브를 꾹 눌러 데워요!\n빨간 선에서 손을 떼야 해요 🔥', 4200);
                 enableKnob();
               }
             }, 80);
@@ -1052,7 +1052,7 @@ window.GAME_ASSETS = {
       <rect x="-11" y="0" width="22" height="170" rx="11" fill="#fff" stroke="#e0cdb2" stroke-width="3"/>
       <rect id="tempFill" x="-6" y="165" width="12" height="0" rx="5" fill="#ff7043"/>
       <line x1="-11" y1="${165-143*.66}" x2="11" y2="${165-143*.66}" stroke="#e0824a" stroke-width="2.5"/>
-      <text x="0" y="-8" text-anchor="middle" font-size="14" fill="#c09a6a" font-family="CookieRun">온도</text>`;
+      `;
     stage.appendChild(gauge);
     // 노브
     const knob = el('g',{transform:'translate(200,396)', style:'cursor:pointer'});
@@ -1101,11 +1101,10 @@ window.GAME_ASSETS = {
           flame.setAttribute('opacity','0');
         }
         steamFx(200, 205);
-        say(`끓기 직전, 완벽해요!
-설탕 없이 저당 알룰로스로 달콤한 퓨레 완성 ♨️`);
-        setTimeout(()=>{ say('불린 젤라틴을 넣고 저을 차례! 💧'); startGelMix(); }, 1700);
+        say(`끓기 직전, 완벽해요! \n설탕 없이도 달콤한 퓨레 완성 ♨️`);
+        setTimeout(()=>{ say('불린 젤라틴을 넣고 저을 차례예요! 🥄'); startGelMix(); }, 1700);
       } else if(temp < ZONE[0]){
-        say('아직 미지근해요~ 조금 더 데워요!', 2200);
+        say('아직 미지근해요~ 조금 더 데워주세요!', 2200);
       }
     };
     knob.addEventListener('pointerdown', e=>{
@@ -1153,7 +1152,7 @@ window.GAME_ASSETS = {
     let squeezeIv = null, dropped = false;
     draggable(blob, {
       onGrab:()=>{
-        say('물기를 꾹 짜면서 냄비로! 💧', 2600);
+        say('물기를 꾹 짜면서 냄비에 넣어주세요!💧', 2600);
         squeezeIv = setInterval(()=>{
           if(!blob._isDragging()){ return; }
           dropFx(blob._x + (Math.random()*10-5), blob._y + 14, '#bfe4f7', '#9fcbe6', 'fx_drop_water');
@@ -1228,8 +1227,7 @@ window.GAME_ASSETS = {
               potFill.setAttribute('fill','url(#pureeG)');
               const gloss = el('ellipse',{cx:-24, cy:8, rx:22, ry:5, fill:'#fff', opacity:.5});
               $('#potBits').appendChild(gloss);
-              say(`반들반들~
-젤라틴이 완전히 녹아 *쫀득함이 완성됐어요!*`);
+              say(`반들반들~ 젤라틴이 완전히 녹아\n*쫀득함이 완성됐어요!*`);
               markDone('heat');
               setTimeout(()=>{ activate('pour'); say(`이제 몰드에 부을 시간!
 틀에 붓기 버튼을 눌러주세요~`); }, 1700);
@@ -1391,10 +1389,9 @@ window.GAME_ASSETS = {
             playClick();
             setBar(placed/3);
             if(placed===3){
-              say(`준비 끝!
-망고가 가득 들어있는 쫀득바, 이제 얼리기만 남았어요 ❄️`);
+              say(`준비 끝! 망고가 가득 들어있는 쫀득바,\n이제 얼리기만 남았어요 ❄️`);
               markDone('pour');
-              setTimeout(()=>{ activate('freeze'); say(`몰드를 냉동실에 쏙!
+              setTimeout(()=>{ activate('freeze'); say(`이제 망고바를 얼릴거예요!
 얼리기 버튼을 눌러요`); }, 1700);
             }
           } else {
@@ -1482,7 +1479,7 @@ window.GAME_ASSETS = {
         }
       }
     });
-    say('몰드를 잡아서 냉동실 안으로 쏙 넣어요!', 3600);
+    say('몰드를 잡아 냉동실 안으로 쏙 넣어주세요!', 3600);
 
     function freezeTimer(){
       let h = 0;
@@ -1628,8 +1625,7 @@ window.GAME_ASSETS = {
       setTimeout(()=>{
         readygo.classList.remove('pop'); readygo.innerHTML = '';
         activate('gel');
-        say(`*생망고 20%, 저당 알룰로스*로 만드는 건강한 쫀득바!
-먼저 젤라틴 버튼을 눌러요! 🥭`, 4500);
+        say(`*생망고 20%, 저당 알룰로스*로 만드는 건강한 쫀득바! 먼저 젤라틴 버튼을 눌러요! 🥭`, 4500);
       }, 1000);
     }, 1200);
   });
