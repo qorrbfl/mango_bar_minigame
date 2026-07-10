@@ -126,13 +126,13 @@
   .item:not(:disabled):hover{transform:translateY(-3px);}
   .item.next:not(:disabled)::before{
     content:""; position:absolute; left:50%; top:-114px; transform:translateX(-50%);
-    width:78px; height:78px; background:url('assets/arrow.png') center/contain no-repeat;
+    width:78px; height:78px; background:url('assets/arrow.webp') center/contain no-repeat;
     animation:arrowBounce 1s ease-in-out infinite; pointer-events:none;
   }
   .item.done::after{content:"✔"; position:absolute; top:-6px; right:-4px; background:var(--mint);
     color:#3f8f68; width:19px; height:19px; border-radius:50%; font-size:12px; line-height:19px; box-shadow:0 2px 4px rgba(0,0,0,.15);}
-  /* 좁은 화면(≤440px)에서 다섯 버튼이 한 줄에 들어오도록 뷰포트 기준으로 축소 */
-  @media (max-width:440px){
+  /* 모바일(스테이지가 100% 폭인 ≤519px 전 구간)에서 다섯 버튼이 한 줄에 들어오도록 뷰포트 기준으로 축소 */
+  @media (max-width:519px){
     .shelf{ gap:0; padding:10px 4px 8px; }
     .item{ padding:5px 3px 4px; font-size:clamp(11px,3.3vw,15px); -webkit-text-stroke-width:2px; }
     .item svg,.item img{ width:17vw; height:17vw; max-width:78px; max-height:78px; }
@@ -178,7 +178,7 @@
   }
   .finish button::before{
     content:''; position:absolute; inset:0; z-index:-1;
-    background:url('assets/mango-cube.png') center/contain no-repeat;
+    background:url('assets/mango-cube.webp') center/contain no-repeat;
     transition:transform .2s;
   }
   .finish.show button{pointer-events:auto;}
@@ -209,7 +209,7 @@
   }
   .ibtn::before{
     content:''; position:absolute; inset:0; z-index:-1;
-    background:url('assets/mango-cube.png') center/contain no-repeat;
+    background:url('assets/mango-cube.webp') center/contain no-repeat;
     transition:transform .2s;
   }
   .ibtn:hover::before{ transform:rotate(30deg); }
@@ -291,23 +291,23 @@
 
   <div class="shelf" id="shelf">
     <button class="item" id="btnGel">
-      <img src="assets/gelatin_button.png" alt="젤라틴">
+      <img src="assets/gelatin_button.webp" alt="젤라틴">
       젤라틴
     </button>
     <button class="item" id="btnBlend">
-      <img src="assets/mixer_button.png" alt="망고 갈기">
+      <img src="assets/mixer_button.webp" alt="망고 갈기">
       망고 갈기
     </button>
     <button class="item" id="btnHeat">
-      <img src="assets/fire_button.png" alt="끓이기">
+      <img src="assets/fire_button.webp" alt="끓이기">
       끓이기
     </button>
     <button class="item" id="btnPour">
-      <img src="assets/mold_button.png" alt="틀에 붓기">
+      <img src="assets/mold_button.webp" alt="틀에 붓기">
       틀에 붓기
     </button>
     <button class="item" id="btnFreeze">
-      <img src="assets/freeze_button.png" alt="얼리기">
+      <img src="assets/freeze_button.webp" alt="얼리기">
       얼리기
     </button>
   </div>
@@ -342,51 +342,51 @@
 /* ============================================================
    🎨 PNG 에셋 교체 설정 (ASSET-GUIDE.md 참고)
    null 자리에 이미지 경로를 넣으면 해당 부위가 PNG로 교체됩니다.
-   예) mango_cube:'assets/mango.png'
+   예) mango_cube:'assets/mango.webp'
 ============================================================ */
 window.GAME_ASSETS = {
   bg: 'assets/bg.jpg',
-  bowl_cold: 'assets/bowl.png',
-  gelatin_sheet: 'assets/gelatin-sheet.png',
-  gelatin_soaked: 'assets/gelatin-soaked.png',
-  gelatin_blob: 'assets/gelatin-blob.png',
+  bowl_cold: 'assets/bowl.webp',
+  gelatin_sheet: 'assets/gelatin-sheet.webp',
+  gelatin_soaked: 'assets/gelatin-soaked.webp',
+  gelatin_blob: 'assets/gelatin-blob.webp',
   blender: null,
-  mixer: 'assets/mixer.png',
-  mixer_lid: 'assets/mixer_lid.png',
-  mixer_glass_01basic: 'assets/mixer_glass_01basic.png',
-  mixer_glass_02overlay: 'assets/mixer_glass_02overlay.png',
-  mixer_glass_03colorburn: 'assets/mixer_glass_03colorburn.png',
-  mixer_inner_clippingmask: 'assets/mixer_inner_clippingmask.png',
+  mixer: 'assets/mixer.webp',
+  mixer_lid: 'assets/mixer_lid.webp',
+  mixer_glass_01basic: 'assets/mixer_glass_01basic.webp',
+  mixer_glass_02overlay: 'assets/mixer_glass_02overlay.webp',
+  mixer_glass_03colorburn: 'assets/mixer_glass_03colorburn.webp',
+  mixer_inner_clippingmask: 'assets/mixer_inner_clippingmask.webp',
   jar_puree: null,
-  mango_cube: 'assets/mango-cube.png',
-  allulose: 'assets/allulose.png',
-  allulose_pour: 'assets/allulose_pour.png',
-  lemon: 'assets/lemon.png',
-  stove: 'assets/stove.png',
-  pot: 'assets/pot.png',
+  mango_cube: 'assets/mango-cube.webp',
+  allulose: 'assets/allulose.webp',
+  allulose_pour: 'assets/allulose_pour.webp',
+  lemon: 'assets/lemon.webp',
+  stove: 'assets/stove.webp',
+  pot: 'assets/pot.webp',
   flame: null,
-  fire_center: 'assets/fire_center.png',
-  fire_left: 'assets/fire_left.png',
-  fire_right: 'assets/fire_right.png',
-  knob: 'assets/knob.png',
-  wood_spoon: 'assets/spoon.png',
-  mold: 'assets/mold.png',
-  mold_clippingmask: 'assets/mold_clippingmask.png',
+  fire_center: 'assets/fire_center.webp',
+  fire_left: 'assets/fire_left.webp',
+  fire_right: 'assets/fire_right.webp',
+  knob: 'assets/knob.webp',
+  wood_spoon: 'assets/spoon.webp',
+  mold: 'assets/mold.webp',
+  mold_clippingmask: 'assets/mold_clippingmask.webp',
   pour_pot: null,
-  stick: 'assets/stick.png',
+  stick: 'assets/stick.webp',
   mold_filled: null,
   freezer: null,
   freezer_door: null,
-  freezer_glass_01basic: 'assets/freezer_glass_01basic.png',
-  freezer_glass_02overlay: 'assets/freezer_glass_02overlay.png',
-  freezer_glass_03colorburn: 'assets/freezer_glass_03colorburn.png',
+  freezer_glass_01basic: 'assets/freezer_glass_01basic.webp',
+  freezer_glass_02overlay: 'assets/freezer_glass_02overlay.webp',
+  freezer_glass_03colorburn: 'assets/freezer_glass_03colorburn.webp',
   bar_done: null,
-  final_mango_bar: 'assets/final_mango_bar.png',
-  final_mango_bar_stick: 'assets/final_mango_bar_stick.png',
+  final_mango_bar: 'assets/final_mango_bar.webp',
+  final_mango_bar_stick: 'assets/final_mango_bar_stick.webp',
   fx_drop_water: null,
   fx_drop_lemon: null,
   fx_bubble: null,
-  fx_steam: 'assets/steam.png',
+  fx_steam: 'assets/steam.webp',
   fx_snow: null,
   sparkle: null,
   icon_gel: null,
@@ -1617,12 +1617,12 @@ window.GAME_ASSETS = {
   $('#btnBack').addEventListener('click', ()=>{ playClick(); howto.hidden = true; });
   $('#btnPlay').addEventListener('click', ()=>{
     intro.style.display = 'none';
-    readygo.innerHTML = '<img src="assets/Ready.png" alt="Ready">';
+    readygo.innerHTML = '<img src="assets/Ready.webp" alt="Ready">';
     readygo.classList.add('pop');
     playReadyGo();
     setTimeout(()=>{
       readygo.classList.remove('pop'); void readygo.offsetWidth;
-      readygo.innerHTML = '<img src="assets/Start.png" alt="Start">';
+      readygo.innerHTML = '<img src="assets/Start.webp" alt="Start">';
       readygo.classList.add('pop');
       playReadyGo();
       setTimeout(()=>{
