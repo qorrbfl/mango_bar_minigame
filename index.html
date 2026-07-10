@@ -1598,12 +1598,19 @@ window.GAME_ASSETS = {
   Object.values(buttons).forEach(b=>b.disabled = true);
   applyAssets();
 
-  // 배경음악 - 첫 화면부터 반복 재생 (자동재생 차단 시 첫 클릭에 시작)
+  // 배경음악 - 첫 화면부터 반복 재생 (자동재생 차단 시 첫 사용자 제스처에 시작)
   const bgmAudio = new Audio('assets/sound/bgm.mp3');
   bgmAudio.loop = true; bgmAudio.volume = 0.35;
-  const startBgm = ()=>{ bgmAudio.play().catch(()=>{}); };
+  let bgmStarted = false;
+  const startBgm = ()=>{
+    if(bgmStarted) return;
+    bgmAudio.play().then(()=>{ bgmStarted = true; }).catch(()=>{});
+  };
   startBgm();
-  document.addEventListener('pointerdown', startBgm, {once:true});
+  // iOS Safari 등 일부 브라우저는 pointerdown을 오디오 잠금 해제 제스처로 인정하지 않으므로 여러 이벤트에 모두 건다
+  ['pointerdown','click','touchend','keydown'].forEach(evt=>{
+    document.addEventListener(evt, startBgm, {once:true});
+  });
 
   const intro = $('#intro'), howto = $('#howto'), readygo = $('#readygo');
   const playPop = ()=>{ const a = new Audio('assets/sound/bubble-pop-07.mp3'); a.volume = 0.6; a.play().catch(()=>{}); };
